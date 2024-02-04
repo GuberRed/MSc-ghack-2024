@@ -25,18 +25,20 @@ gcloud config set account $ACCOUNT
 gcloud config set compute/region $OPS_REGION
 
 gcloud config configurations activate $CONFIG
-gcloud auth login
-gcloud auth application-default login
+#gcloud auth login
+#gcloud auth application-default login
 
-sed -i '' '/OPS_PROJECT =/d' terraform/terraform.tfvars
-sed -i '' '/OPS_REGION =/d' terraform/terraform.tfvars
+sed -i '' '/prefix =/d' terraform/terraform.tfvars
+sed -i '' '/ops_project =/d' terraform/terraform.tfvars
+sed -i '' '/ops_region =/d' terraform/terraform.tfvars
 sed -i '' '/terraform_service_account =/d' terraform/terraform.tfvars
 
-echo "OPS_PROJECT = \"${OPS_PROJECT}\"" >> terraform/terraform.tfvars
-echo "OPS_REGION = \"${COMPUTE_REGION}\"" >> terraform/terraform.tfvars
+echo "prefix = \"${PREFIX}\"" >> terraform/terraform.tfvars
+echo "ops_project = \"${OPS_PROJECT}\"" >> terraform/terraform.tfvars
+echo "ops_region = \"${OPS_REGION}\"" >> terraform/terraform.tfvars
 echo "terraform_service_account = \"${TF_SA}@${OPS_PROJECT}.iam.gserviceaccount.com\"" >> terraform/terraform.tfvars
 
-./scripts/enable_gcp_apis.sh
+./scripts/prepare_enable_gcp_apis.sh
 gsutil mb -p $OPS_PROJECT  -l $OPS_REGION -b on $BUCKET
 ./scripts/prepare_terraform_service_account.sh
 gcloud artifacts repositories create $DOCKER_REPO_NAME --repository-format=docker --location=$OPS_REGION --description="Docker repository for ghack infra challange"

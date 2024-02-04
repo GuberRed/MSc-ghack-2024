@@ -25,9 +25,14 @@ provider "google" {
     env-label = "${var.prefix}"
   }
 }
+
 resource "google_container_cluster" "ghack_cluster" {
   name     = "${var.prefix}-cluster"
   location = var.ops_region
+  node_pool {
+    name       = "default-pool"
+    initial_node_count = 1
+  }
 }
 
 variable "teams" {

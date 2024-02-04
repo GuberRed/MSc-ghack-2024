@@ -8,7 +8,7 @@ rm -rf terraform/.terraform
 rm terraform/.terraform.lock.hcl
 echo "delete artifacts repository:"
 gcloud artifacts repositories delete $DOCKER_REPO_NAME --location=$COMPUTE_REGION
-gcloud iam service-accounts delete "${TF_SA}@${PROJECT_ID}.iam.gserviceaccount.com"
+gcloud iam service-accounts delete "${TF_SA}@${OPS_PROJECT}.iam.gserviceaccount.com"
 echo "delete gcloud config"
 gcloud config configurations activate default
 gcloud config configurations delete $CONFIG

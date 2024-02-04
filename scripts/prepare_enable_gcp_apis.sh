@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 #
 # /*
 #  * Copyright 2023 Google LLC
@@ -19,20 +18,22 @@
 #  */
 #
 
-# use FIFOs as semaphores and use them to ensure that new processes are spawned as soon as possible and that no more than N processes runs at the same time. But it requires more code.
+#https://console.developers.google.com/apis/api/datastore.googleapis.com/overview?project=adam-g-sandbox
+set -e
+echo "enabling iam .."
+gcloud services enable iam.googleapis.com
 
-task(){
+echo "enabling artifactregistry .."
+gcloud services enable artifactregistry.googleapis.com
 
-   [[ ${#1} -lt 10 ]] && SUFFIX="0${1}" || SUFFIX="$1"
-   echo  "${DESTINATION_TABLE_SPEC_PREFIX}_${SUFFIX}"
-   bq cp --force "${ORIGIN_TABLE_SPEC}" "${DESTINATION_TABLE_SPEC_PREFIX}_${SUFFIX}";
-}
+echo "enabling storage .."
+gcloud services enable storage.googleapis.com
 
-N=50
-(
-for table in {1..1000}; do
-   ((i=i%N)); ((i++==0)) && wait
-   task "${table}" &
-done
-)
+echo "enabling cloudbuild .."
+gcloud services enable cloudbuild.googleapis.com
 
+echo "enabling serviceusage .."
+gcloud services enable serviceusage.googleapis.com
+
+echo "enabling vpcaccess .."
+gcloud services enable vpcaccess.googleapis.com
