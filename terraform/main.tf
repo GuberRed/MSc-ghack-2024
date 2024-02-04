@@ -14,7 +14,7 @@ resource "google_container_cluster" "ghack_cluster" {
 resource "google_container_node_pool" "ghack_cluster_node_pool" {
   name       = "${var.prefix}-np"
   cluster    = google_container_cluster.ghack_cluster.id
-  node_count = 3
+  node_count = 2
 
   node_config {
     preemptible  = true
@@ -36,8 +36,7 @@ resource "null_resource" "get-credentials" {
  }
 }
 
-#https://registry.terraform.io/modules/blackbird-cloud/gke-namespace/google/latest
-resource "kubernetes_namespace" "team_namespaces" {
+resource "kubernetes_namespace" "gke_team_namespaces" {
   count = length(var.teams)
   metadata {
     name = var.teams[count.index]
@@ -45,22 +44,52 @@ resource "kubernetes_namespace" "team_namespaces" {
   depends_on = [null_resource.get-credentials]
 }
 
+resource "kubernetes_role" "gke_rbac_role_definition" {
+ count = length(var.teams)
+  depends_on = [kubernetes_namespace.gke_team_namespaces]
 
-#https://github.com/gruntwork-io/terraform-kubernetes-namespace/blob/v0.5.1/modules/namespace-roles/main.tf
-# resource "kubernetes_role" "rbac_role_access_read_only" {
-#   count      = var.create_resources ? 1 : 0
-#   depends_on = [null_resource.dependency_getter]
+  metadata {
+    name        = "${var.teams[count.index]}-role"
+    namespace   = var.teams[count.index]
+  }
 
-#   metadata {
-#     name        = "${var.namespace}-access-read-only"
-#     namespace   = var.namespace
-#     labels      = var.labels
-#     annotations = var.annotations
-#   }
+  rule {
+    api_groups = [""]
+    resources  = ["*"]
+    verbs      = ["*"]
+  }
+}
 
-#   rule {
-#     api_groups = ["*"]
-#     resources  = ["*"]
-#     verbs      = ["get", "list", "watch"]
-#   }
-# }
+resource "google_service_account" "gke_teamsa" {
+  count        = length(var.teams)
+  account_id   = "teamsa-${var.teams[count.index]}"
+  display_name = "teamsa-${var.teams[count.index]}"
+}
+
+#https://gcloud.devoteam.com/blog/the-ultimate-security-guide-to-rbac-on-google-kubernetes-engine/
+#https://cloud.google.com/kubernetes-engine/docs/how-to/role-based-access-control#rolebinding#
+resource "kubernetes_role_binding" "gke_rbac_role_binding" {
+  count = length(var.teams)
+
+  metadata {
+    name      = "${var.teams[count.index]}-binding"
+    namespace = var.teams[count.index]
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = kubernetes_role.gke_rbac_role_definition[count.index].metadata[0].name
+  }
+
+  subject {
+    #api_group = "rbac.authorization.k8s.io"
+    kind = "User"
+    name      = google_service_account.gke_teamsa[count.index].email
+  }
+
+  depends_on = [kubernetes_role.gke_rbac_role_definition]
+}
+#kubectl get rolebinding,clusterrolebinding --all-namespaces
+#kubectl get roles
+#kubectl describe role teama-role -n teama

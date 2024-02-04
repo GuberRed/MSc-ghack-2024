@@ -9,7 +9,7 @@ variable "terraform_service_account" {
 }
 variable "teams" {
   type = list(string)
-  default = ["team1", "team2", "zzzz"]
+  default = ["teama", "teamb", "zzzz"]
   description = "teamlist"
 }
 variable "ops_project" {
