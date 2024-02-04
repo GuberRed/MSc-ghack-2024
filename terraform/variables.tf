@@ -4,9 +4,13 @@ variable "prefix" {
   description = "prefix for all resources"
 }
 variable "terraform_service_account" {
-  type = string
   description = "terraform SA to deploy all resources"
   
+}
+variable "teams" {
+  type = list(string)
+  default = ["team1", "team2", "zzzz"]
+  description = "teamlist"
 }
 variable "ops_project" {
   type = string
