@@ -31,3 +31,9 @@
   }
 ```
 #4. Also i got some random timeout at first run (kubernetes) after (google)
+
+#5.pipeline idea below
+    step1:google terraform apply - projects/cluster/iam/artifactregistry
+    step2:kubernetes terraform apply
+    step3:build docker images for front/sql and publish them to artifact registry
+    step4:deploy app inside each namespace

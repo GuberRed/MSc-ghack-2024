@@ -2,16 +2,14 @@ terraform {
   required_providers {
     google = ">= 5.12.0"
   }
-}
-# terraform {
-#   cloud {
-#     organization = "Devoteam-G-Cloud"
+  cloud {
+    organization = "Devoteam-G-Cloud"
 
-#     workspaces {
-#       name = "ghack-infra-google"
-#     }
-#   }
-# }
+    workspaces {
+      name = "ghack-infra-google"
+    }
+  }
+}
 provider "google" {
   alias = "impersonation"
   scopes = [
