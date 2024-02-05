@@ -44,4 +44,3 @@ gsutil mb -p $OPS_PROJECT  -l $OPS_REGION -b on $BUCKET
 gcloud artifacts repositories create $DOCKER_REPO_NAME --repository-format=docker --location=$OPS_REGION --description="Docker repository for ghack infra challange"
 
 ./scripts/deploy_terraform.sh
-
