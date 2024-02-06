@@ -1,9 +1,12 @@
 terraform {
   required_providers {
     google = ">= 5.12.0"
-    kubernetes = {
-      source = "hashicorp/kubernetes"
-      version = "2.25.2"
+  }
+  cloud {
+    organization = "Devoteam-G-Cloud"
+
+    workspaces {
+      name = "ghack-infra-google"
     }
   }
 }
@@ -33,9 +36,4 @@ provider "google" {
   default_labels = {
     env-label = "${var.prefix}"
   }
-}
-
-provider "kubernetes" {
-  config_path    = "~/.kube/config"
-  config_context = "gke_${var.ops_project}_${var.ops_region}-c_${var.prefix}-cluster"
 }
