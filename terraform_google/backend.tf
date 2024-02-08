@@ -1,7 +1,7 @@
-# terraform {
-#   backend "gcs" {
-#     bucket  = "ag-ghack-gcp-coe-msp-sandbox-tfstate"
-#     prefix  = "terraform/google/state"
-#     impersonate_service_account = "ag-ghack-terraform@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
-#   }
-# }
+terraform {
+  backend "gcs" {
+    bucket  = "ghack-infra-tfstate"
+    prefix  = "terraform/state"
+    impersonate_service_account = "tfc-ghack-sa@abel-ghack-infra.iam.gserviceaccount.com"
+  }
+}

@@ -1,4 +1,4 @@
-prefix = "ag-ghack"
-ops_project = "gcp-coe-msp-sandbox"
+prefix = "ghack"
+ops_project = "abel-ghack-infra"
 ops_region = "europe-west1"
-terraform_service_account = "ag-ghack-terraform@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
+terraform_service_account = "tfc-ghack-sa@abel-ghack-infra.iam.gserviceaccount.com"
