@@ -22,6 +22,7 @@ variable "ops_region" {
 #NETWORK VARS
 variable "vpc_network_name" {
   type = string
+  default = "defaultvpc"
   description = "VPC Network name for Infra challange for ghack2024"
 }
 
@@ -39,11 +40,13 @@ variable "vpc_network_routing_mode" {
 
 variable "subnet_name" {
   type = string
+  default = "default-subnet"
   description = "Subnet name"
 }
 
 variable "subnet_description" {
   type = string
+  default = "subenet description"
   description = "Subnet description"
 }
 
@@ -55,6 +58,7 @@ variable "subnet_range" {
 
 variable "firewall_rule_egress_deny_all_name" {
   type = string
+  default = "fwdenyall"
   description = "Firewall rule name for denying all egress"
 }
 
