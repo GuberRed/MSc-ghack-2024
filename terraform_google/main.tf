@@ -14,11 +14,13 @@ module "gke_ghack_cluster" {
   source = "./modules/gke"
   ops_project = var.ops_project
   ops_region =  var.ops_region
+  ops_network = "${var.prefix}-vpc"
+  
   prefix = var.prefix
   depends_on = [ 
     google_project_service.api_gke_enable,
     module.network 
-  ]
+    ]
 }
 
 # module "projects_teams" {
