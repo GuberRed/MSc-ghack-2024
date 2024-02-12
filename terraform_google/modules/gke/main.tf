@@ -19,7 +19,7 @@ resource "google_container_node_pool" "ghack_cluster_node_pool" {
 
   node_config {
     preemptible  = true
-    machine_type = "e2-medium"
+    machine_type = "e2-standard-2"
 
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
     service_account = google_service_account.ghack_cluster_sa.email
