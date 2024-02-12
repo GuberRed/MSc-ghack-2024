@@ -27,6 +27,7 @@ module "gke_ghack_cluster" {
 module "projects_teams" {
   source = "./modules/team-sa"
   teams = var.teams
+  prefix = var.prefix
   ops_project = var.ops_project
 }
 module "network" {
