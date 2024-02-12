@@ -6,10 +6,10 @@ variable "prefix" {
   type = string
   description = "prefix for all resources"
 }
-variable "terraform_service_account" {
-  description = "terraform SA to deploy all resources"
+# variable "terraform_service_account" {
+#   description = "terraform SA to deploy all resources"
   
-}
+# }
 variable "teams" {
   type = list(string)
   default = ["teama", "teamb", "zzzz"]

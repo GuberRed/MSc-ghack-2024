@@ -42,7 +42,7 @@ terraform {
 provider "google" {
   project = var.ops_project
   region = var.ops_region
-  credentials = var.credentials
+  credentials = base64decode(var.credentials)
   #impersonate_service_account = "tfc-ghack-sa@abel-ghack-infra.iam.gserviceaccount.com"
   # access_token = data.google_service_account_access_token.default.access_token
   # request_timeout = "60s"
