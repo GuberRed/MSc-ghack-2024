@@ -1,4 +1,7 @@
 #GENERAL VARS
+variable "credentials" {
+  description = "Credentials for gcs SA impersonation"
+}
 variable "prefix" {
   type = string
   description = "prefix for all resources"
