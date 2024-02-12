@@ -8,6 +8,7 @@ resource "google_container_cluster" "ghack_cluster" {
   name     = "${var.prefix}-cluster"
   location = "${var.ops_region}"
   network = var.ops_network
+  subnetwork = var.ops_subnetwork
   
   remove_default_node_pool = true
   initial_node_count = 1

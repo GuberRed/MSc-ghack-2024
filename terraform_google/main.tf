@@ -15,7 +15,8 @@ module "gke_ghack_cluster" {
   ops_project = var.ops_project
   ops_region =  var.ops_region
   ops_network = "${var.prefix}-vpc"
-  
+  ops_subnetwork = "${var.prefix}-subnet"
+
   prefix = var.prefix
   depends_on = [ 
     google_project_service.api_gke_enable,
