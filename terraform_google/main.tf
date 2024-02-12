@@ -1,4 +1,4 @@
-resource "google_project_service" "project" {
+resource "google_project_service" "api_gke_enable" {
   project = var.ops_project
     service = "container.googleapis.com"
 
@@ -15,6 +15,7 @@ module "gke_ghack_cluster" {
   ops_project = var.ops_project
   ops_region =  var.ops_region
   prefix = var.prefix
+  depends_on = [ google_project_service.api_gke_enable ]
 }
 
 module "projects_teams" {
