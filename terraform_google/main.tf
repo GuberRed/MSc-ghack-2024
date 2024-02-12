@@ -24,11 +24,11 @@ module "gke_ghack_cluster" {
     ]
 }
 
-# module "projects_teams" {
-#   source = "./modules/projects_teams"
-#   teams = var.teams
-#   project = var.ops_project
-# }
+module "projects_teams" {
+  source = "./modules/team-sa"
+  teams = var.teams
+  project = var.ops_project
+}
 module "network" {
   source = "./modules/network"
   vpc_network_name = "${var.prefix}-vpc"
