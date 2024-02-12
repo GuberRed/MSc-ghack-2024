@@ -6,7 +6,7 @@ resource "google_service_account" "ghack_cluster_sa" {
 
 resource "google_container_cluster" "ghack_cluster" {
   name     = "${var.prefix}-cluster"
-  location = "${var.ops_region}-c"
+  location = "${var.ops_region}"
   remove_default_node_pool = true
   initial_node_count = 1
   deletion_protection = false
