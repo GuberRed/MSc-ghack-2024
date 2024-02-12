@@ -7,7 +7,7 @@
  }
 }
 ```
-#
+
 #2. SA and bucket must be created before running terraform
 
 ###both/backend.tf
