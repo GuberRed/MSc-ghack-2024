@@ -15,7 +15,10 @@ module "gke_ghack_cluster" {
   ops_project = var.ops_project
   ops_region =  var.ops_region
   prefix = var.prefix
-  depends_on = [ google_project_service.api_gke_enable ]
+  depends_on = [ 
+    google_project_service.api_gke_enable,
+    module.network 
+  ]
 }
 
 # module "projects_teams" {
@@ -36,4 +39,5 @@ module "network" {
   firewall_rule_egress_deny_all_name = "egress-deny-all"
   firewall_rule_egress_deny_all_description = "Egress deny all rule"
   #firewall_rule_egress_allow_restricted_name ="${var.prefix}-egress-allow"
+  
 }
