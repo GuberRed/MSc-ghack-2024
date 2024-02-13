@@ -14,8 +14,8 @@ module "gke_ghack_cluster" {
   source = "./modules/gke"
   ops_project = var.ops_project
   ops_region =  var.ops_region
-  ops_network = "${var.prefix}-vpc"
-  ops_subnetwork = "${var.prefix}-subnet"
+  ops_network = module.network.network_self_link
+  ops_subnetwork = module.network.subnet_self_link
 
   prefix = var.prefix
   depends_on = [ 
