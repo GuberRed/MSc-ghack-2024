@@ -29,6 +29,7 @@ module "egress_deny_all" {
   network_name = module.vpc.network_name
   project_id   = var.ops_project
   ranges       = ["0.0.0.0/0"]
+  priority = 3000
   deny = [{
     protocol = "all"
   }]
