@@ -1,43 +1,64 @@
+variable "prefix" {}
+variable "ops_project" {}
+variable "compute_region" {}
+
+#NETWORK VARS
 variable "vpc_network_name" {
-  description = "The name of the VPC network."
+  type = string
+  default = "defaultvpc"
+  description = "VPC Network name for Infra challange for ghack2024"
 }
 
-variable "ops_project" {
-  description = "The project ID where resources will be created."
-}
-
-#network
 variable "vpc_network_description" {
-    default = "vpc description"
-  description = "The description of the VPC network."
+  type = string
+  default = "VPC Network for Infra challange for ghack2024"
+  description = "VPC network description"
 }
 
 variable "vpc_network_routing_mode" {
-    default = "GLOBAL"
-  description = "The routing mode of the VPC network."
+  type = string
+  default = "REGIONAL"
+  description = "VPC network routing mode"
 }
 
 variable "subnet_name" {
-  description = "The name of the subnet."
-}
-
-variable "subnet_range" {
-    default = "10.20.30.0/24"
-  description = "The IP range of the subnet."
-}
-
-variable "compute_region" {
-  description = "The region where the subnet will be created."
+  type = string
+  default = "default-subnet"
+  description = "Subnet name"
 }
 
 variable "subnet_description" {
-  description = "The description of the subnet."
+  type = string
+  default = "subenet description"
+  description = "Subnet description"
+}
+
+variable "subnet_range" {
+  type = string
+  default = "10.20.30.0/24"
+  description = "Subnet range"
 }
 
 variable "firewall_rule_egress_deny_all_name" {
-  description = "The name of the egress deny all firewall rule."
+  type = string
+  default = "fwdenyall"
+  description = "Firewall rule name for denying all egress"
 }
 
 variable "firewall_rule_egress_deny_all_description" {
-  description = "The description of the egress deny all firewall rule."
+  type = string
+  default = "Deny all egress traffic"
+  description = "Firewall rule description for denying all egress"
+}
+
+variable "firewall_rule_egress_allow_restricted_name" {
+  type = string
+  default = "egress-allow-restricted"
+  description = "Firewall rule name for allowing restricted APIs access"
+}
+
+variable "firewall_rule_egress_allow_restricted_description" {
+  type = string
+  default = "Allow egress traffic only from restricted apis"
+  description = "Firewall rule description for allowing restricted APIs access"
 }
