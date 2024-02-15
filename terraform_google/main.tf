@@ -1,6 +1,6 @@
 resource "google_project_service" "api_gke_enable" {
   project = var.ops_project
-    service = "container.googleapis.com"
+  service = "container.googleapis.com"
 
   timeouts {
     create = "30m"
@@ -11,28 +11,28 @@ resource "google_project_service" "api_gke_enable" {
 }
 
 module "gke_ghack_cluster" {
-  source = "./modules/gke"
-  ops_project = var.ops_project
-  ops_region =  var.ops_region
-  ops_network = module.network.network_self_link
+  source         = "./modules/gke"
+  ops_project    = var.ops_project
+  ops_region     = var.ops_region
+  ops_network    = module.network.network_self_link
   ops_subnetwork = module.network.subnet_self_link
 
   prefix = var.prefix
-  depends_on = [ 
+  depends_on = [
     google_project_service.api_gke_enable,
-    module.network 
-    ]
+    module.network
+  ]
 }
 
 module "projects_teams" {
-  source = "./modules/team-sa"
-  teams = var.teams
-  prefix = var.prefix
+  source      = "./modules/team-sa"
+  teams       = var.teams
+  prefix      = var.prefix
   ops_project = var.ops_project
 }
 module "network" {
-  source = "./modules/network"
-  ops_project = var.ops_project
-  prefix = var.prefix
+  source         = "./modules/network"
+  ops_project    = var.ops_project
+  prefix         = var.prefix
   compute_region = var.ops_region
 }

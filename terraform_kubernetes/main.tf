@@ -1,9 +1,9 @@
 
 # Get the credentials 
 resource "null_resource" "get-credentials" {
- provisioner "local-exec" {
-   command = "gcloud container clusters get-credentials ${var.ghack_cluster_name} --zone=europe-west1-c"
- }
+  provisioner "local-exec" {
+    command = "gcloud container clusters get-credentials ${var.ghack_cluster_name} --zone=europe-west1-c"
+  }
 }
 
 resource "kubernetes_namespace" "gke_team_namespaces" {
@@ -15,12 +15,12 @@ resource "kubernetes_namespace" "gke_team_namespaces" {
 }
 
 resource "kubernetes_role" "gke_rbac_role_definition" {
- count = length(var.teams)
+  count      = length(var.teams)
   depends_on = [kubernetes_namespace.gke_team_namespaces]
 
   metadata {
-    name        = "${var.teams[count.index]}-role"
-    namespace   = var.teams[count.index]
+    name      = "${var.teams[count.index]}-role"
+    namespace = var.teams[count.index]
   }
 
   rule {

@@ -15,7 +15,7 @@ resource "google_compute_subnetwork" "subnetwork" {
   }
 
   secondary_ip_range = [
-  for i in range(length(var.secondary_ranges)) : var.secondary_ranges[i]
+    for i in range(length(var.secondary_ranges)) : var.secondary_ranges[i]
   ]
 
   purpose = var.purpose

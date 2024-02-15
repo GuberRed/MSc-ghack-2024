@@ -5,7 +5,7 @@ module "vpc" {
   project_id   = var.ops_project
   description  = var.vpc_network_description
   routing_mode = var.vpc_network_routing_mode
-  
+
 }
 
 module "subnet" {

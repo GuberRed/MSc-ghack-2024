@@ -1,6 +1,6 @@
 variable "project_id" {
   description = "The ID of the project where subnets will be created"
-  type = string
+  type        = string
 }
 
 variable "subnet_name" {

@@ -3,12 +3,12 @@ variable "credentials" {
   description = "Credentials for gcs SA impersonation"
 }
 variable "prefix" {
-  type = string
+  type        = string
   description = "prefix for all resources"
 }
 variable "teams" {
-  type = list(string)
-  default = ["teama", "teamb", "zzzz"]
+  type        = list(string)
+  default     = ["teama", "teamb", "zzzz"]
   description = "teamlist"
 }
 variable "ops_project" {
