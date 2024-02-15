@@ -9,7 +9,7 @@ resource "google_project_service" "api_gke_enable" {
 
   disable_dependent_services = true
 }
-
+/*
 module "gke_ghack_cluster" {
   source         = "./modules/gke"
   ops_project    = var.ops_project
@@ -23,7 +23,7 @@ module "gke_ghack_cluster" {
     module.network
   ]
 }
-
+*/
 module "projects_teams" {
   source      = "./modules/team-sa"
   teams       = var.teams
