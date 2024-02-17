@@ -6,8 +6,8 @@ resource "google_cloudfunctions_function" "create-namespace" {
   project     = var.ops_project
   region      = var.ops_region
 
-  source_archive_bucket = google_storage_bucket.function_bucket.name
-  source_archive_object = "function_code.zip"
+  source_archive_bucket = google_storage_bucket.cfbucket.name
+  source_archive_object = "cloudfunction.zip"
 
   available_memory_mb = 256
   timeout             = 60
@@ -22,15 +22,15 @@ resource "google_cloudfunctions_function" "create-namespace" {
   }
 }
 
-resource "google_storage_bucket" "bucket" {
-  name     = "test-bucket"
-  location = "US"
+resource "google_storage_bucket" "cfbucket" {
+  name     = "${var.prefix}-bucket"
+  location = "eu"
 }
 
 resource "google_storage_bucket_object" "archive" {
-  name   = "index.zip"
-  bucket = google_storage_bucket.bucket.name
-  source = "./path/to/zip/file/which/contains/code"
+  name   = "cloudfunction.zip"
+  bucket = google_storage_bucket.cfbucket.name
+  source = "../terraform_kubernetes/cf"
 }
 
 resource "google_pubsub_topic" "trigger_topic" {
