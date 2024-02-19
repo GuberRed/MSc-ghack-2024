@@ -43,9 +43,7 @@ steps:
         # Create Kubernetes namespace
         kubectl create namespace "$team_namespace"
 
-        # gcloud projects add-iam-policy-binding abel-ghack-infra \
-        # --member=serviceAccount:${service_account_name} \
-        # --role=roles/container.viewer
+        
 
 
   # Create role
@@ -112,10 +110,17 @@ steps:
           name: "${service_account_name}"
         EOF
 
-#publish pubsub message
-#gcloud pubsub topics publish projects/abel-ghack-infra/topics/ghack-teamsa-setup-trigger --message "ghack-teamsa-teama@abel-ghack-infra.iam.gserviceaccount.com"
-#impersonate:
-#gcloud container clusters get-credentials CLUSTER_NAME --zone ZONE --project PROJECT_ID --impersonate-service-account=SERVICE_ACCOUNT_EMAIL
-#gcloud container clusters get-credentials ghack-cluster --region europe-west1 --project abel-ghack-infra --impersonate-service-account="ghack-teamsa-teama@abel-ghack-infra.iam.gserviceaccount.com"
+# Create role binding
+  - id: "IAM role container.viewer"
+    name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - -x
+      - -c
+      - |
+        #!/bin/bash
+        service_account_name=$(cat /workspace/teamsa.txt)
 
-
+        gcloud projects add-iam-policy-binding abel-ghack-infra \
+        --member=serviceAccount:${service_account_name} \
+        --role=roles/container.viewer
