@@ -36,3 +36,11 @@ module "network" {
   prefix         = var.prefix
   compute_region = var.ops_region
 }
+module "cloud_build" {
+  source      = "./modules/cloudbuild"
+  ops_project    = var.ops_project
+  prefix         = var.prefix
+  ops_region = var.ops_region
+
+  depends_on = [ module.gke_ghack_cluster ]
+}
