@@ -41,6 +41,7 @@ module "cloud_build" {
   ops_project    = var.ops_project
   prefix         = var.prefix
   ops_region = var.ops_region
+  cluster_name = module.gke_ghack_cluster.output_cluster_name
 
   depends_on = [ module.gke_ghack_cluster ]
 }

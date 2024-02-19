@@ -5,9 +5,9 @@ resource "google_cloudbuild_trigger" "ghack_cloudbuild_trigger" {
   project = var.ops_project
 
   substitutions = {
-    "_CLUSTER_NAME" = "xxxx"
+    "_CLUSTER_NAME" = var.cluster_name
   }
-  filename = "terraform_kubernetes/cloudbuild/cloudbuild.yaml"
+  filename = "cloudbuild/cloudbuild.yaml"
 
   source_to_build {
     uri       = "https://github.com/devoteamgcloud/ghack-infra-2024"
