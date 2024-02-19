@@ -3,7 +3,7 @@ SERVICE_ACCOUNT_EMAIL="test-01@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
 PROJECT_ID="abel-ghack-infra"
 
 #publish pubsub
-gcloud pubsub topics publish projects/abel-ghack-infra/topics/projects/abel-ghack-infra/topics/ghack-team-create-topic --message $SERVICE_ACCOUNT_EMAIL
+gcloud pubsub topics publish projects/abel-ghack-infra/topics/ghack-team-create-topic --message $SERVICE_ACCOUNT_EMAIL
 
 # Create a new gcloud configuration
 gcloud config configurations create ghackinfra

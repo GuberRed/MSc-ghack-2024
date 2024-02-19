@@ -1,1 +1,2 @@
+gcloud config configurations activate default
 gcloud config configurations delete ghackinfra
