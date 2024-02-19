@@ -27,6 +27,7 @@ variable "subnet_range" {
   default     = "10.20.30.0/24"
   description = "Subnet range"
 }
+
 /*
 variable "firewall_rule_egress_deny_all_name" {
   type        = string

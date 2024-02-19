@@ -1,0 +1,121 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+steps:
+  # get cluster creds
+  - id: "get cluster creds"
+    name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - -x
+      - -c
+      - |
+        #!/bin/bash
+        gcloud container clusters get-credentials ghack-cluster --region europe-west1 --project abel-ghack-infra
+  # Get Pub/Sub message
+  - id: "Get Pub/Sub message"
+    name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - -x
+      - -c
+      - |
+        gcloud pubsub subscriptions pull "projects/abel-ghack-infra/subscriptions/ghack-team-create-sub" --format=json --auto-ack | grep data | awk -F'"' '/"data"/ {print $4}' | base64 -d > /workspace/teamsa.txt
+
+  # create team namespace
+  - id: "create team namespace"
+    name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - -x
+      - -c
+      - |
+        #!/bin/bash
+        service_account_name=$(cat /workspace/teamsa.txt)
+
+        # Extract teamname and teamprojected
+        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
+        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
+        
+        # Merge teamname and teamprojectid
+        team_namespace="${teamname}-${teamprojectid}"
+
+        # Create Kubernetes namespace
+        kubectl create namespace "$team_namespace"
+
+        # gcloud projects add-iam-policy-binding abel-ghack-infra \
+        # --member=serviceAccount:${service_account_name} \
+        # --role=roles/container.viewer
+
+
+  # Create role
+  - name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - -x
+      - -c
+      - |
+        #!/bin/bash
+        service_account_name=$(cat /workspace/teamsa.txt)
+
+        # Extract teamname and teamprojected
+        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
+        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
+        
+        # Merge teamname and teamprojectid
+        team_namespace="${teamname}-${teamprojectid}"
+
+        #actual role creation
+        cat <<EOF | kubectl apply -f -
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: Role
+        metadata:
+          name: ${team_namespace}-role
+          namespace: $team_namespace
+        rules:
+        - apiGroups: [""]
+          resources: ["*"]
+          verbs: ["*"]
+        EOF
+
+  # Create role binding
+  - id: "Create role binding"
+    name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - -x
+      - -c
+      - |
+        #!/bin/bash
+        service_account_name=$(cat /workspace/teamsa.txt)
+
+        # Extract teamname and teamprojected
+        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
+        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
+        
+        # Merge teamname and teamprojectid
+        team_namespace="${teamname}-${teamprojectid}"
+
+        # Create role binding
+        cat <<EOF | kubectl apply -f -
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: RoleBinding
+        metadata:
+          name: ${team_namespace}-binding
+          namespace: $team_namespace
+        roleRef:
+          apiGroup: rbac.authorization.k8s.io
+          kind: Role
+          name: ${team_namespace}-role
+        subjects:
+        - kind: User
+          name: "${service_account_name}"
+        EOF
+
+#publish pubsub message
+#gcloud pubsub topics publish projects/abel-ghack-infra/topics/ghack-teamsa-setup-trigger --message "ghack-teamsa-teama@abel-ghack-infra.iam.gserviceaccount.com"
+#impersonate:
+#gcloud container clusters get-credentials CLUSTER_NAME --zone ZONE --project PROJECT_ID --impersonate-service-account=SERVICE_ACCOUNT_EMAIL
+#gcloud container clusters get-credentials ghack-cluster --region europe-west1 --project abel-ghack-infra --impersonate-service-account="ghack-teamsa-teama@abel-ghack-infra.iam.gserviceaccount.com"
+
+
