@@ -10,6 +10,18 @@ resource "google_project_service" "api_gke_enable" {
   disable_dependent_services = true
 }
 
+resource "google_project_service" "api_secret_manager_enable" {
+  project = var.ops_project
+  service = "secretmanager.googleapis.com"
+  
+  timeouts {
+    create = "30m"
+    update = "40m"
+  }
+
+  disable_dependent_services = true
+}
+
 module "gke_ghack_cluster" {
   source         = "./modules/gke"
   ops_project    = var.ops_project

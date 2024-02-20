@@ -122,3 +122,23 @@ steps:
         - kind: User
           name: "${service_account_name}"
         EOF
+  # create team namespace
+  - id: "create team namespace"
+    name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - -x
+      - -c
+      - |
+        #!/bin/bash
+        service_account_name=$(cat /workspace/teamsa.txt)
+
+        # Extract teamname and teamprojected
+        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
+        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
+        
+        # Merge teamname and teamprojectid
+        team_namespace="${teamname}-${teamprojectid}"
+
+        # Create Kubernetes namespace
+        kubectl create namespace "$team_namespace"
