@@ -122,8 +122,8 @@ steps:
         - kind: User
           name: "${service_account_name}"
         EOF
-  # create team namespace
-  - id: "create team namespace"
+  # create team secret
+  - id: "create team secret"
     name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
     args:
@@ -143,5 +143,16 @@ steps:
         # Create a secret for the team
         gcloud secrets create "$team_namespace" --project="$_OPS_PROJECT_ID"
 
-        # Add the secret data (replace 'your-secret-data' with actual secret data)
-        echo -n "your-secret-data" | gcloud secrets versions add "$team" --data-file=- --project="$_OPS_PROJECT_ID"
+        pass_gen="$(openssl rand -hex 16)"
+        pass_gen_prep="($pass_gen)-nowimpassword:)"
+        pass_gen_base64=$(echo $pass_gen_prep | base64)
+        pass_final="(${pass_gen_base64})-imnotpasswordyet:()"
+
+        #save for container
+        echo "Generated password: $pass_gen" > /workspace/teamsecret.txt
+        echo "Generated password: $pass_gen"
+        echo "prepared password: $pass_gen_prep"
+        echo "base64 password: $pass_gen_base64"
+        echo "Updated password: $pass_final"
+
+        echo -n "$pass_final" | gcloud secrets versions add "$team_namespace" --data-file=- --project="$_OPS_PROJECT_ID"
