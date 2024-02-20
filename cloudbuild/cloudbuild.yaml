@@ -123,7 +123,7 @@ steps:
           name: "${service_account_name}"
         EOF
   # create team secret
-  - id: "create team secret"
+  - id: "Secret generate pass"
     name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
     args:
@@ -156,3 +156,34 @@ steps:
         echo "Updated password: $pass_final"
 
         echo -n "$pass_final" | gcloud secrets versions add "$team_namespace" --data-file=- --project="$_OPS_PROJECT_ID"
+  
+  # iam role assesor
+  - id: "Secret iam assesor"
+    name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - -x
+      - -c
+      - |
+        #!/bin/bash
+        service_account_name=$(cat /workspace/teamsa.txt)
+
+        # Extract teamname and teamprojected
+        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
+        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
+        
+        # Merge teamname and teamprojectid
+        team_namespace="${teamname}-${teamprojectid}"
+
+        gcloud secrets add-iam-policy-binding "$team_namespace" --member="serviceAccount:$service_account_name" --role="roles/secretmanager.secretAccessor" --project="$_OPS_PROJECT_ID"
+
+  # build image
+  - id: "build image"
+    name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - -x
+      - -c
+      - |
+        #!/bin/bash
+        echo "future"
