@@ -13,7 +13,7 @@ resource "google_project_service" "api_gke_enable" {
 resource "google_project_service" "api_secret_manager_enable" {
   project = var.ops_project
   service = "secretmanager.googleapis.com"
-  
+
   timeouts {
     create = "30m"
     update = "40m"
@@ -49,11 +49,11 @@ module "network" {
   compute_region = var.ops_region
 }
 module "cloud_build" {
-  source      = "./modules/cloudbuild"
-  ops_project    = var.ops_project
-  prefix         = var.prefix
-  ops_region = var.ops_region
+  source       = "./modules/cloudbuild"
+  ops_project  = var.ops_project
+  prefix       = var.prefix
+  ops_region   = var.ops_region
   cluster_name = module.gke_ghack_cluster.output_cluster_name
 
-  depends_on = [ module.gke_ghack_cluster ]
+  depends_on = [module.gke_ghack_cluster]
 }

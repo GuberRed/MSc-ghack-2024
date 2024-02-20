@@ -39,5 +39,5 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_cluster_name"></a> [cluster\_name](#output\_cluster\_name) | n/a |
+| <a name="output_output_cluster_name"></a> [output\_cluster\_name](#output\_output\_cluster\_name) | n/a |
 <!-- END_TF_DOCS -->

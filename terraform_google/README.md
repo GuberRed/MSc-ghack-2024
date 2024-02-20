@@ -17,6 +17,7 @@
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_cloud_build"></a> [cloud\_build](#module\_cloud\_build) | ./modules/cloudbuild | n/a |
 | <a name="module_gke_ghack_cluster"></a> [gke\_ghack\_cluster](#module\_gke\_ghack\_cluster) | ./modules/gke | n/a |
 | <a name="module_network"></a> [network](#module\_network) | ./modules/network | n/a |
 | <a name="module_projects_teams"></a> [projects\_teams](#module\_projects\_teams) | ./modules/team-sa | n/a |
@@ -26,6 +27,7 @@
 | Name | Type |
 |------|------|
 | [google_project_service.api_gke_enable](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_service) | resource |
+| [google_project_service.api_secret_manager_enable](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_service) | resource |
 
 ## Inputs
 
@@ -39,7 +41,5 @@
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| <a name="output_prefix"></a> [prefix](#output\_prefix) | n/a |
+No outputs.
 <!-- END_TF_DOCS -->
