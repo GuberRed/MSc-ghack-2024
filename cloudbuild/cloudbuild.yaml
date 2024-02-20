@@ -39,7 +39,7 @@ steps:
         --role=roles/container.viewer
 
   # create team namespace
-  - id: "create team namespace"
+  - id: "GKE create team namespace"
     name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
     args:
@@ -60,7 +60,8 @@ steps:
         kubectl create namespace "$team_namespace"
 
   # Create role
-  - name: "gcr.io/cloud-builders/gcloud"
+  - id: "GKE Create role"
+    name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
     args:
       - -x
@@ -90,7 +91,7 @@ steps:
         EOF
 
   # Create role binding
-  - id: "Create role binding"
+  - id: "GKE Binding role"
     name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
     args:
