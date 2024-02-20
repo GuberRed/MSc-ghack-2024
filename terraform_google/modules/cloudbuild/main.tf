@@ -6,6 +6,9 @@ resource "google_cloudbuild_trigger" "ghack_cloudbuild_trigger" {
 
   substitutions = {
     "_CLUSTER_NAME" = var.cluster_name
+    "_OPS_PROJECT_ID" = var.ops_project
+    "_OPS_REGION" = var.ops_region
+    "_OPS_PREFIX" = var.prefix
   }
   filename = "cloudbuild/cloudbuild.yaml"
 

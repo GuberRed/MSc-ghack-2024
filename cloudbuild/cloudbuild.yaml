@@ -11,7 +11,7 @@ steps:
       - -c
       - |
         #!/bin/bash
-        gcloud container clusters get-credentials ghack-cluster --region europe-west1 --project abel-ghack-infra
+        gcloud container clusters get-credentials $_CLUSTER_NAME --region $_OPS_REGION --project $_OPS_PROJECT_ID
  
   # Get Pub/Sub message
   - id: "Get Pub/Sub message"
@@ -21,7 +21,7 @@ steps:
       - -x
       - -c
       - |
-        gcloud pubsub subscriptions pull "projects/abel-ghack-infra/subscriptions/ghack-team-create-sub" --format=json --auto-ack | grep data | awk -F'"' '/"data"/ {print $4}' | base64 -d > /workspace/teamsa.txt
+        gcloud pubsub subscriptions pull "projects/$_OPS_PROJECT_ID/subscriptions/$_OPS_PREFIX-team-create-sub" --format=json --auto-ack | grep data | awk -F'"' '/"data"/ {print $4}' | base64 -d > /workspace/teamsa.txt
 
   # Create role binding
   - id: "IAM role container.viewer"
@@ -34,7 +34,7 @@ steps:
         #!/bin/bash
         service_account_name=$(cat /workspace/teamsa.txt)
 
-        gcloud projects add-iam-policy-binding abel-ghack-infra \
+        gcloud projects add-iam-policy-binding $_OPS_PROJECT_ID \
         --member=serviceAccount:${service_account_name} \
         --role=roles/container.viewer
 
@@ -140,5 +140,8 @@ steps:
         # Merge teamname and teamprojectid
         team_namespace="${teamname}-${teamprojectid}"
 
-        # Create Kubernetes namespace
-        kubectl create namespace "$team_namespace"
+        # Create a secret for the team
+        gcloud secrets create "$team_namespace" --project="$_OPS_PROJECT_ID"
+
+        # Add the secret data (replace 'your-secret-data' with actual secret data)
+        echo -n "your-secret-data" | gcloud secrets versions add "$team" --data-file=- --project="$_OPS_PROJECT_ID"
