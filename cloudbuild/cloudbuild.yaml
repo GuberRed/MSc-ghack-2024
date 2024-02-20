@@ -147,7 +147,7 @@ steps:
         pass_gen="$(openssl rand -hex 16)"
         pass_gen_prep="($pass_gen)-nowimpassword:)"
         pass_gen_base64=$(echo $pass_gen_prep | base64)
-        pass_final="(${pass_gen_base64})-imnotpasswordyet:("
+        pass_final="(${pass_gen_base64})-imnotpasswordyet:(ps.onemore"
 
         #save for container
         echo "Generated password: $pass_gen" > /workspace/teamsecret.txt

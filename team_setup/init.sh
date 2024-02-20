@@ -1,11 +1,11 @@
 # Replace these variables with your actual values
 ###########################
-SERVICE_ACCOUNT_EMAIL="test08@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
-PROJECT_ID="abel-ghack-infra"
+export SERVICE_ACCOUNT_EMAIL="test08@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
+export PROJECT_ID="abel-ghack-infra"
 ############################
 
 #namespace
-team_namespace="$(echo "$SERVICE_ACCOUNT_EMAIL" | awk -F'[@.]' '{print $1}')-$(echo "$SERVICE_ACCOUNT_EMAIL" | awk -F'[@.]' '{print $2}')"
+export team_namespace="$(echo "$SERVICE_ACCOUNT_EMAIL" | awk -F'[@.]' '{print $1}')-$(echo "$SERVICE_ACCOUNT_EMAIL" | awk -F'[@.]' '{print $2}')"
 
 #publish pubsub
 gcloud pubsub topics publish projects/abel-ghack-infra/topics/ghack-team-create-topic --message $SERVICE_ACCOUNT_EMAIL
