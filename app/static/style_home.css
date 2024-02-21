@@ -1,0 +1,18 @@
+body {
+  background-color: aquamarine;
+}
+.info-bar {
+  height: 30px;
+  text-align: center;
+  background-color: #8B4513;
+  color: #575757;
+  display: flex;
+  justify-content: space-between;
+}
+.info-bar p {
+  margin: 2px;
+}
+.info-bar-img{
+  height: 30px;
+  width:30px;
+}

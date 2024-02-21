@@ -122,6 +122,8 @@ steps:
         subjects:
         - kind: User
           name: "${service_account_name}"
+          apiGroup: rbac.authorization.k8s.io
+
         EOF
   # create team secret
   - id: "Secret generate pass"
