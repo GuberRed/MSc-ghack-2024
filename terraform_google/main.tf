@@ -1,19 +1,11 @@
-resource "google_project_service" "api_gke_enable" {
+resource "google_project_service" "api_enable" {
+  for_each = toset([
+    "container.googleapis.com", "secretmanager.googleapis.com"
+  ])
+
   project = var.ops_project
-  service = "container.googleapis.com"
-
-  timeouts {
-    create = "30m"
-    update = "40m"
-  }
-
-  disable_dependent_services = true
-}
-
-resource "google_project_service" "api_secret_manager_enable" {
-  project = var.ops_project
-  service = "secretmanager.googleapis.com"
-
+  service = each.value
+  
   timeouts {
     create = "30m"
     update = "40m"
@@ -56,4 +48,10 @@ module "cloud_build" {
   cluster_name = module.gke_ghack_cluster.output_cluster_name
 
   depends_on = [module.gke_ghack_cluster]
+}
+resource "google_artifact_registry_repository" "ghack-docker-repo" {
+  location      = var.ops_region
+  repository_id = "${var.prefix}-docker-repo"
+  description   = "Repo for Ghack app"
+  format        = "DOCKER"
 }
