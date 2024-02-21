@@ -1,19 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: ghack-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend
+      app: ghack-app
   template:
     metadata:
       labels:
-        app: frontend
+        app: ghack-app
     spec:
       containers:
-      - name: frontend
-        image: europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgub:latest
+      - name: ghack-app
+        #image: europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgub:latest
+        image: nginx
         ports:
         - containerPort: 80
+
+ 
