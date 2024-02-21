@@ -23,7 +23,7 @@ module "gke_ghack_cluster" {
 
   prefix = var.prefix
   depends_on = [
-    google_project_service.api_gke_enable,
+    google_project_service.api_enable,
     module.network
   ]
 }
