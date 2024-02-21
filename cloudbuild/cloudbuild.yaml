@@ -36,7 +36,7 @@ steps:
 
         gcloud projects add-iam-policy-binding $_OPS_PROJECT_ID \
         --member=serviceAccount:${service_account_name} \
-        --role=roles/ghackteamrole
+        --role=projects/abel-ghack-infra/roles/ghackteamrole
         #container.clusters.get
 
   # create team namespace
