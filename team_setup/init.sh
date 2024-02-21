@@ -1,6 +1,6 @@
 # Replace these variables with your actual values
 ###########################
-export SERVICE_ACCOUNT_EMAIL="tagger@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
+export SERVICE_ACCOUNT_EMAIL="p862555250693-piuc8t@gcp-sa-cloud-sql.iam.gserviceaccount.com"
 export PROJECT_ID="abel-ghack-infra"
 ############################
 
@@ -25,6 +25,7 @@ gcloud config configurations activate ghackinfra
 #impersonate sa
 gcloud config set auth/impersonate_service_account $SERVICE_ACCOUNT_EMAIL
 
+#gcloud auth activate-service-account $SERVICE_ACCOUNT_EMAIL
 gcloud auth login
 
 #verify
