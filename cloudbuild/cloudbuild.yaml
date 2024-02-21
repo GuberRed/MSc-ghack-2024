@@ -38,6 +38,9 @@ steps:
         --member=serviceAccount:${service_account_name} \
         --role=projects/abel-ghack-infra/roles/ghackteamrole
         #container.clusters.get
+        gcloud projects add-iam-policy-binding $_OPS_PROJECT_ID \
+        --member=serviceAccount:${service_account_name} \
+        --role=roles/iam.serviceAccountTokenCreator
 
   # create team namespace
   - id: "GKE create team namespace"
