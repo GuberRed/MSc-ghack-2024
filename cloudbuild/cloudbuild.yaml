@@ -36,7 +36,8 @@ steps:
 
         gcloud projects add-iam-policy-binding $_OPS_PROJECT_ID \
         --member=serviceAccount:${service_account_name} \
-        --role=roles/container.viewer
+        --role=roles/ghack-team-role
+        #container.clusters.get
 
   # create team namespace
   - id: "GKE create team namespace"

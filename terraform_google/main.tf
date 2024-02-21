@@ -40,6 +40,11 @@ module "network" {
   prefix         = var.prefix
   compute_region = var.ops_region
 }
+module "iam" {
+  source       = "./modules/iam"
+  ops_project  = var.ops_project
+  prefix       = var.prefix
+}
 module "cloud_build" {
   source       = "./modules/cloudbuild"
   ops_project  = var.ops_project
@@ -47,7 +52,7 @@ module "cloud_build" {
   ops_region   = var.ops_region
   cluster_name = module.gke_ghack_cluster.output_cluster_name
 
-  depends_on = [module.gke_ghack_cluster]
+  depends_on = [module.gke_ghack_cluster, module.iam]
 }
 resource "google_artifact_registry_repository" "ghack-docker-repo" {
   location      = var.ops_region
