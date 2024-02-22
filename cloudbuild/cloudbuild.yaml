@@ -12,7 +12,9 @@ steps:
       - |
         #!/bin/bash
         gcloud container clusters get-credentials $_CLUSTER_NAME --region $_OPS_REGION --project $_OPS_PROJECT_ID
- 
+        gcloud auth configure-docker \
+        europe-west1-docker.pkg.dev
+
   # Get Pub/Sub message
   - id: "Get Pub/Sub message"
     name: "gcr.io/cloud-builders/gcloud"
@@ -41,6 +43,11 @@ steps:
         gcloud projects add-iam-policy-binding $_OPS_PROJECT_ID \
         --member=serviceAccount:${service_account_name} \
         --role=roles/iam.serviceAccountTokenCreator
+# gcloud projects add-iam-policy-binding abel-ghack-infra \
+#         --member=serviceAccount:ghack-cluster-sa@abel-ghack-infra.iam.gserviceaccount.com \
+#         --role=roles/artifactregistry.reader
+#         ghack-cluster-sa@abel-ghack-infra.iam.gserviceaccount.com
+
 
   # create team namespace
   - id: "GKE create team namespace"
