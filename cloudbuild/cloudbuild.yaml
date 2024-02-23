@@ -164,7 +164,7 @@ steps:
 
         #save for container
         echo $pass_gen > /workspace/teamsecret.txt
-        echo "Generated password: $pass_gen" > /workspace/teamsecret.txt
+        echo "Generated password: $pass_gen"
         echo "Generated password: $pass_gen"
         echo "prepared password: $pass_gen_prep"
         echo "base64 password: $pass_gen_base64"
