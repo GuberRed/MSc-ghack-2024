@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: db-service
-  namespace: nanann
+  name: db-svc
+  namespace: nananna
 spec:
   selector:
     app: db
@@ -17,7 +17,7 @@ metadata:
   labels:
     app: db
   name: gubgub
-  namespace: nanann
+  namespace: nananna
 spec:
   restartPolicy: Always
   containers:
@@ -37,7 +37,7 @@ metadata:
   labels:
     app: app
   name: gubgubapp
-  namespace: nanann
+  namespace: nananna
 spec:
   restartPolicy: Always
   containers:
@@ -45,12 +45,15 @@ spec:
     image: myimage
     ports:
     - containerPort: 5000
+    env:
+    - name: MYSQL_PASSWORD
+      value: password
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: app-service
-  namespace: nanann
+  namespace: nananna
 spec:
   type: LoadBalancer
   ports:
