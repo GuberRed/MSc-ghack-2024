@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5550:5000"
+    environment:
+      MYSQL_PASSWORD: password
     depends_on:
       - db
     networks:
