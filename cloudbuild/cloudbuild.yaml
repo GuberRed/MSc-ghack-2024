@@ -192,7 +192,7 @@ steps:
         gcloud secrets add-iam-policy-binding "$team_namespace" --member="serviceAccount:$service_account_name" --role="roles/secretmanager.secretAccessor" --project="$_OPS_PROJECT_ID"
 
   # deployemtn services manifest
-  - id: "GKE - Deploy application "
+  - id: "GKE - Deploy db-svc "
     name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
     args:
@@ -210,7 +210,7 @@ steps:
         # Merge teamname and teamprojectid
         team_namespace="${teamname}-${teamprojectid}"
         
-        #actual role creation
+        #db-svc
         cat <<EOF | kubectl apply -f -
         apiVersion: v1
         kind: Service
@@ -224,7 +224,30 @@ steps:
             - protocol: TCP
               port: 3306
               targetPort: 3306
-        ---
+        EOF
+
+  # deployemtn services manifest
+  - id: "GKE - Deploy db"
+    name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - -x
+      - -c
+      - |
+        #!/bin/bash
+        service_account_name=$(cat /workspace/teamsa.txt)
+        pass_gen=$(cat /workspace/teamsecret.txt)
+
+        # Extract teamname and teamprojected
+        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
+        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
+        
+        # Merge teamname and teamprojectid
+        team_namespace="${teamname}-${teamprojectid}"
+        
+
+        #db-pod
+        cat <<EOF | kubectl apply -f -
         apiVersion: v1
         kind: Pod
         metadata:
@@ -244,7 +267,29 @@ steps:
               value: game_db
             - name: MYSQL_ROOT_PASSWORD
               value: $pass_gen
-        ---
+        EOF
+    # deployemtn services manifest
+  - id: "GKE - Deploy app"
+    name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - -x
+      - -c
+      - |
+        #!/bin/bash
+        service_account_name=$(cat /workspace/teamsa.txt)
+        pass_gen=$(cat /workspace/teamsecret.txt)
+
+        # Extract teamname and teamprojected
+        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
+        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
+        
+        # Merge teamname and teamprojectid
+        team_namespace="${teamname}-${teamprojectid}"
+        
+
+        #app-deployment
+        cat <<EOF | kubectl apply -f -
         apiVersion: apps/v1
         kind: Deployment
         metadata:
@@ -268,7 +313,29 @@ steps:
                 env:
                 - name: MYSQL_ROOT_PASSWORD
                   value: password
-        ---
+        EOF
+  # deployemtn services manifest
+  - id: "GKE - Deploy svc-lb"
+    name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - -x
+      - -c
+      - |
+        #!/bin/bash
+        service_account_name=$(cat /workspace/teamsa.txt)
+        pass_gen=$(cat /workspace/teamsecret.txt)
+
+        # Extract teamname and teamprojected
+        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
+        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
+        
+        # Merge teamname and teamprojectid
+        team_namespace="${teamname}-${teamprojectid}"
+        
+
+        #svc-lb
+        cat <<EOF | kubectl apply -f -
         apiVersion: v1
         kind: Service
         metadata:
