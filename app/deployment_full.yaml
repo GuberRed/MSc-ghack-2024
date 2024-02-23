@@ -51,9 +51,9 @@ spec:
         image: europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgub:latest
         ports:
         - containerPort: 5000
- #       env:
- #       - name: MYSQL_PASSWORD
-  #        value: password
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
 ---
 apiVersion: v1
 kind: Service
