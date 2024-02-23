@@ -163,6 +163,7 @@ steps:
         pass_final="(${pass_gen_base64})-imnotpasswordyet:(ps.onemore"
 
         #save for container
+        echo $pass_gen > /workspace/teamsecret.txt
         echo "Generated password: $pass_gen" > /workspace/teamsecret.txt
         echo "Generated password: $pass_gen"
         echo "prepared password: $pass_gen_prep"
