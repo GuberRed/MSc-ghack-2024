@@ -1,30 +1,71 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-svc
+  namespace: tagger-gcp-coe-msp-sandbox
+spec:
+  selector:
+    app: db
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: db
+  name: gubgub-db
+  namespace: tagger-gcp-coe-msp-sandbox
+spec:
+  restartPolicy: Always
+  containers:
+  - name: db
+    image: mysql:latest
+    ports:
+    - containerPort: 3306
+    env:
+    - name: MYSQL_DATABASE
+      value: game_db
+    - name: MYSQL_ROOT_PASSWORD
+      value: password
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"kind":"Deployment","apiVersion":"apps/v1","metadata":{"name":"my-deployment","namespace":"cloudbuild-scheduler-gcp-coe-msp-sandbox","creationTimestamp":null,"labels":{"app":"my-deployment"}},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"my-deployment"}},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"my-deployment"}},"spec":{"containers":[{"name":"gubgub","image":"europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgub:latest","ports":[{"containerPort":5000}],"resources":{}}]}},"strategy":{}},"status":{}}
-  creationTimestamp: null
-  labels:
-    app: my-deployment
-  name: my-deployment
-  namespace: cloudbuild-scheduler-gcp-coe-msp-sandbox
+  name: gubgub-frontend
+  namespace: tagger-gcp-coe-msp-sandbox
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: my-deployment
-  strategy: {}
+      app: app
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        app: my-deployment
+        app: app
     spec:
       containers:
-      - image: europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgub:latest
-        name: gubgub
+      - name: app
+        image: europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgub:latest
         ports:
         - containerPort: 5000
-        resources: {}
-status: {}
+ #       env:
+ #       - name: MYSQL_PASSWORD
+  #        value: password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  namespace: tagger-gcp-coe-msp-sandbox
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 5000
+  selector:
+    app: app
+
+#kubectl create deployment my-deployment --image=europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgub:latest --port=5000 --namespace=tagger-gcp-coe-msp-sandbox --dry-run=client -o yaml --save-config > deployment.yaml
