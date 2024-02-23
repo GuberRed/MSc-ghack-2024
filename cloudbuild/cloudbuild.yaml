@@ -201,15 +201,15 @@ steps:
       - |
         #!/bin/bash
         service_account_name=$(cat /workspace/teamsa.txt)
-        
+        pass_gen=$(cat /workspace/teamsecret.txt)
+
         # Extract teamname and teamprojected
         teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
         teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
         
         # Merge teamname and teamprojectid
         team_namespace="${teamname}-${teamprojectid}"
-        team_namespace="xxxx"
-        pass_gen="bwewe"
+        
         #actual role creation
         cat <<EOF | kubectl apply -f -
         apiVersion: v1
