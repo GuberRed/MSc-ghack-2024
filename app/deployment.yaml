@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"kind":"Deployment","apiVersion":"apps/v1","metadata":{"name":"my-deployment","namespace":"cloudbuild-scheduler-gcp-coe-msp-sandbox","creationTimestamp":null,"labels":{"app":"my-deployment"}},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"my-deployment"}},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"my-deployment"}},"spec":{"containers":[{"name":"gubgub","image":"europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgub:latest","ports":[{"containerPort":5000}],"resources":{}}]}},"strategy":{}},"status":{}}
+  creationTimestamp: null
+  labels:
+    app: my-deployment
+  name: my-deployment
+  namespace: cloudbuild-scheduler-gcp-coe-msp-sandbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-deployment
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: my-deployment
+    spec:
+      containers:
+      - image: europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgub:latest
+        name: gubgub
+        ports:
+        - containerPort: 5000
+        resources: {}
+status: {}

@@ -96,7 +96,7 @@ steps:
           name: ${team_namespace}-role
           namespace: $team_namespace
         rules:
-        - apiGroups: [""]
+        - apiGroups: ["","apps"]
           resources: ["*"]
           verbs: ["*"]
         EOF
