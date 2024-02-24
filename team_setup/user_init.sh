@@ -1,6 +1,6 @@
 # Replace these variables with your actual values
 ###########################
-export SERVICE_ACCOUNT_EMAIL="luigi-sa-test-env@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
+export SERVICE_ACCOUNT_EMAIL="dispatcher@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
 export PROJECT_ID="abel-ghack-infra"
 ############################
 
@@ -28,6 +28,15 @@ gcloud config set auth/impersonate_service_account $SERVICE_ACCOUNT_EMAIL
 #gcloud auth activate-service-account $SERVICE_ACCOUNT_EMAIL
 gcloud auth login
 
+sleep 15
+
+#get cluster credentials
+gcloud container clusters get-credentials ghack-cluster --region europe-west1 --project $PROJECT_ID
+
+# Get the secret payload
+SECRET_PAYLOAD=$(gcloud secrets versions access latest --secret="$team_namespace" --project="$PROJECT_ID" --format='get(payload.data)' | base64 -d)
+
+echo "Secret payload: $SECRET_PAYLOAD"
 #verify
 gcloud config list
 

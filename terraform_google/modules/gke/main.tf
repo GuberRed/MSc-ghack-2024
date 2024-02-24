@@ -31,3 +31,11 @@ resource "google_container_node_pool" "ghack_cluster_node_pool" {
     ]
   }
 }
+resource "google_project_iam_binding" "ghack_sa_artifactregistry_viewer" {
+  project = var.ops_project
+  role    = "roles/artifactregistry.viewer"
+
+  members = [
+    "serviceAccount:${google_service_account.ghack_cluster_sa.email}"
+  ]
+}
