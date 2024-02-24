@@ -11,3 +11,6 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL
 );
+
+INSERT INTO users (username, password, email) VALUES ('test', 'test', 'player1@example.com');
+INSERT INTO users (username, password, email) VALUES ('player2', 'password2', 'player2@example.com');

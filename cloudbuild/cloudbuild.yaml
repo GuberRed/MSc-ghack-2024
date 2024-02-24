@@ -191,6 +191,25 @@ steps:
         team_namespace="${teamname}-${teamprojectid}"
 
         gcloud secrets add-iam-policy-binding "$team_namespace" --member="serviceAccount:$service_account_name" --role="roles/secretmanager.secretAccessor" --project="$_OPS_PROJECT_ID"
+  #Build db image and push to Artifact Registry
+  - id: "Build db"
+    name: 'gcr.io/cloud-builders/docker'
+    args:
+      - -x
+      - -c
+      - |
+        #!/bin/bash
+        service_account_name=$(cat /workspace/teamsa.txt)
+
+        # Extract teamname and teamprojected
+        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
+        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
+        
+        # Merge teamname and teamprojectid
+        team_namespace="${teamname}-${teamprojectid}"
+
+        gcloud auth configure-docker europe-west1-docker.pkg.dev
+        docker buildx build --push --platform linux/amd64 --tag europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/$team_namespace:latest app_db
 
   # deploy services manifest
   - id: "GKE - Deploy db-svc "

@@ -13,10 +13,11 @@ services:
     networks:
       - game-network
   db:
-    build:
-      context: ../app_db
-      dockerfile: Dockerfile
+    image: mysql:latest
     restart: always
+    environment:
+      MYSQL_DATABASE: game_db
+      MYSQL_ROOT_PASSWORD: 111b0db2129e7527cece3429333ac026
     ports:
       - "3306:3306"
     networks:
