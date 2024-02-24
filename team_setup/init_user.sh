@@ -1,6 +1,6 @@
 # Replace these variables with your actual values
 ###########################
-export SERVICE_ACCOUNT_EMAIL="logic-monitor-sa-test@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
+export SERVICE_ACCOUNT_EMAIL="luigi-sa-test-env@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
 export PROJECT_ID="abel-ghack-infra"
 ############################
 

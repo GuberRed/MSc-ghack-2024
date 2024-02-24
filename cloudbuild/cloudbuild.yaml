@@ -192,7 +192,7 @@ steps:
 
         gcloud secrets add-iam-policy-binding "$team_namespace" --member="serviceAccount:$service_account_name" --role="roles/secretmanager.secretAccessor" --project="$_OPS_PROJECT_ID"
 
-  # deployemtn services manifest
+  # deploy services manifest
   - id: "GKE - Deploy db-svc "
     name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
@@ -227,7 +227,7 @@ steps:
               targetPort: 3306
         EOF
 
-  # deployemtn services manifest
+  # deploy services manifest
   - id: "GKE - Deploy db"
     name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
@@ -269,7 +269,7 @@ steps:
             - name: MYSQL_ROOT_PASSWORD
               value: $pass_gen
         EOF
-    # deployemtn services manifest
+  # deploy services manifest
   - id: "GKE - Deploy app"
     name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
@@ -312,12 +312,13 @@ steps:
                 ports:
                 - containerPort: 5000
                 env:
-                - name: MYSQL_ROOT_PASSWORD
-                  value: password
+                - name: MYSQL_PASSWORD
+                  value: IHateThisGame
         EOF
-  # deployemtn services manifest
+  # deploy service loadbalancer
   - id: "GKE - Deploy svc-lb"
     name: "gcr.io/cloud-builders/gcloud"
+    #dir: "cloudbuild/Kubernetes"
     entrypoint: "bash"
     args:
       - -x

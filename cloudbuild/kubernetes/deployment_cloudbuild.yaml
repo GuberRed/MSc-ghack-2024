@@ -52,8 +52,8 @@ spec:
         ports:
         - containerPort: 5000
         env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: password
+        - name: MYSQL_PASSWORD
+          value: IHateThisGame
 ---
 apiVersion: v1
 kind: Service
