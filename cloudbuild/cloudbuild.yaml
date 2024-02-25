@@ -212,15 +212,26 @@ steps:
   #       docker buildx build --push --platform linux/amd64 --tag europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/$team_namespace:latest app_db
   
   #Build db image and push to Artifact Registry
-  - id: "Build db"
-    name: 'gcr.io/cloud-builders/docker'
-    script: 
-      - '-c'
-      - |
-        #!/bin/bash
-        gcloud auth configure-docker europe-west1-docker.pkg.dev
-        docker buildx build --push --platform linux/amd64 --tag europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/$team_namespace:latest app_db
-    # automapSubstitutions: true
+  # - id: "Build db"
+  #   name: 'gcr.io/cloud-builders/docker'
+  #   script: 
+  #     - '-c'
+  #     - |
+  #       #!/bin/bash
+  #       gcloud auth configure-docker europe-west1-docker.pkg.dev
+  #       docker buildx build --push --platform linux/amd64 --tag europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/$team_namespace:latest app_db
+  
+  # Login to Artifact Registry using service account (replace with service account name)
+  - name: 'gcr.io/cloud-builders/docker'  
+  - name: 'docker login --username tfc-ghack-sa@abel-ghack-infra.iam.gserviceaccount.com'
+    args: ['-u', 'tfc-ghack-sa@abel-ghack-infra.iam.gserviceaccount.com']
+
+  # Build and push image using docker buildx
+  - name: 'docker buildx build'
+    args: ['--push', '--platform', 'linux/amd64', '-t', 'europe-west1-docker.pkg.dev/abel-ghack-infra/docker-repo/nanan:latest']
+    env:
+      - 'BUILDER_OUTPUT=docker'  # Set output mode to Docker
+
     # deploy services manifest
   - id: "GKE - Deploy db-svc "
     name: "gcr.io/cloud-builders/gcloud"
