@@ -1,3 +1,6 @@
+Q: How to build db images for teams - tag/imagename/diffrent repo? any permision sets if diffrent repo?
+
+
 https://docs.google.com/document/d/1sIaESUIIFLzu2BDOL1xRzaiHSGWAXd3h9AYKCFmcKXk/edit
 Desc to Jason:
 Time is of the essence, and the company's future hinges on your success. Can you navigate the restricted environment, secure the necessary secrets, and deploy the game before it's game over? Fix deployments, unlock secrets, master limited access, win the glory!

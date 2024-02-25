@@ -276,14 +276,9 @@ steps:
           restartPolicy: Always
           containers:
           - name: db
-            image: mysql:latest
+            image: europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgubdb:$teamname
             ports:
             - containerPort: 3306
-            env:
-            - name: MYSQL_DATABASE
-              value: game_db
-            - name: MYSQL_ROOT_PASSWORD
-              value: $pass_gen
         EOF
   # deploy services manifest
   - id: "GKE - Deploy app"
