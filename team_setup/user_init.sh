@@ -1,6 +1,6 @@
 # Replace these variables with your actual values
 ###########################
-export SERVICE_ACCOUNT_EMAIL="oliwer-backup-function@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
+export SERVICE_ACCOUNT_EMAIL="oliwer-carrefour-test@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
 export PROJECT_ID="abel-ghack-infra"
 ############################
 
@@ -28,7 +28,7 @@ gcloud config set auth/impersonate_service_account $SERVICE_ACCOUNT_EMAIL
 #gcloud auth activate-service-account $SERVICE_ACCOUNT_EMAIL
 gcloud auth login
 
-sleep 10
+sleep 15
 
 #get cluster credentials
 gcloud container clusters get-credentials ghack-cluster --region europe-west1 --project $PROJECT_ID
