@@ -1,6 +1,6 @@
 # Replace these variables with your actual values
 ###########################
-export SERVICE_ACCOUNT_EMAIL="tagger@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
+export SERVICE_ACCOUNT_EMAIL="access-gd@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
 export PROJECT_ID="abel-ghack-infra"
 ############################
 
@@ -33,6 +33,7 @@ sleep 18
 #get cluster credentials
 gcloud container clusters get-credentials ghack-cluster --region europe-west1 --project $PROJECT_ID
 
+sleep 35
 # Get the secret payload
 SECRET_PAYLOAD=$(gcloud secrets versions access latest --secret="$team_namespace" --project="$PROJECT_ID" --format='get(payload.data)' | base64 -d)
 
