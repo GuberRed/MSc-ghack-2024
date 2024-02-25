@@ -191,45 +191,22 @@ steps:
         team_namespace="${teamname}-${teamprojectid}"
 
         gcloud secrets add-iam-policy-binding "$team_namespace" --member="serviceAccount:$service_account_name" --role="roles/secretmanager.secretAccessor" --project="$_OPS_PROJECT_ID"
-  # #Build db image and push to Artifact Registry
-  # - id: "Build db"
-  #   name: 'gcr.io/cloud-builders/docker'
-  #   args:
-  #     - -x
-  #     - -c
-  #     - |
-  #       #!/bin/bash
-  #       service_account_name=$(cat /workspace/teamsa.txt)
 
-  #       # Extract teamname and teamprojected
-  #       teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
-  #       teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
-        
-  #       # Merge teamname and teamprojectid
-  #       team_namespace="${teamname}-${teamprojectid}"
-
-  #       gcloud auth configure-docker europe-west1-docker.pkg.dev
-  #       docker buildx build --push --platform linux/amd64 --tag europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/$team_namespace:latest app_db
-  
-  #Build db image and push to Artifact Registry
-  # - id: "Build db"
-  #   name: 'gcr.io/cloud-builders/docker'
-  #   script: 
-  #     - '-c'
-  #     - |
-  #       #!/bin/bash
-  #       gcloud auth configure-docker europe-west1-docker.pkg.dev
-  #       docker buildx build --push --platform linux/amd64 --tag europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/$team_namespace:latest app_db
-  
-  - name: 'gcr.io/cloud-builders/docker'
+    #Build db image and push to Artifact Registry
+  - id: "Build db"
+    name: 'gcr.io/cloud-builders/docker'
     entrypoint: '/bin/sh'
     args:
       - '-c'
       - |
-        # Build the Docker image
-        docker buildx build --platform linux/amd64 -t gubgub:0.1 app_db
-        docker tag gubgub:0.1 europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgub:0.1
-        docker push europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgub:0.1
+        service_account_name=$(cat /workspace/teamsa.txt)
+
+        # Extract teamname and teamprojected
+        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
+
+        docker buildx build --platform linux/amd64 -t gubgubdb:$teamname app_db
+        docker tag gubgubdb:$teamname europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgubdb:$teamname
+        docker push europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgubdb:$teamname
   
   # deploy services manifest
   - id: "GKE - Deploy db-svc "
