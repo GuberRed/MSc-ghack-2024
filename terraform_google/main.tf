@@ -5,7 +5,7 @@ resource "google_project_service" "api_enable" {
 
   project = var.ops_project
   service = each.value
-  
+
   timeouts {
     create = "30m"
     update = "40m"
@@ -41,9 +41,9 @@ module "network" {
   compute_region = var.ops_region
 }
 module "iam" {
-  source       = "./modules/iam"
-  ops_project  = var.ops_project
-  prefix       = var.prefix
+  source      = "./modules/iam"
+  ops_project = var.ops_project
+  prefix      = var.prefix
 }
 module "cloud_build" {
   source       = "./modules/cloudbuild"

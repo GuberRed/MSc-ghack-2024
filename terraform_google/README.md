@@ -19,15 +19,15 @@
 |------|--------|---------|
 | <a name="module_cloud_build"></a> [cloud\_build](#module\_cloud\_build) | ./modules/cloudbuild | n/a |
 | <a name="module_gke_ghack_cluster"></a> [gke\_ghack\_cluster](#module\_gke\_ghack\_cluster) | ./modules/gke | n/a |
+| <a name="module_iam"></a> [iam](#module\_iam) | ./modules/iam | n/a |
 | <a name="module_network"></a> [network](#module\_network) | ./modules/network | n/a |
-| <a name="module_projects_teams"></a> [projects\_teams](#module\_projects\_teams) | ./modules/team-sa | n/a |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [google_project_service.api_gke_enable](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_service) | resource |
-| [google_project_service.api_secret_manager_enable](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_service) | resource |
+| [google_artifact_registry_repository.ghack-docker-repo](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/artifact_registry_repository) | resource |
+| [google_project_service.api_enable](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_service) | resource |
 
 ## Inputs
 

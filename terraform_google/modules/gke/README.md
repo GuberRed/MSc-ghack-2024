@@ -23,7 +23,6 @@ No modules.
 |------|------|
 | [google_container_cluster.ghack_cluster](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_cluster) | resource |
 | [google_container_node_pool.ghack_cluster_node_pool](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_node_pool) | resource |
-| [google_service_account.ghack_cluster_sa](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
 
 ## Inputs
 
