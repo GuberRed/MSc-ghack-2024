@@ -1,5 +1,6 @@
 Q: How to build db images for teams - tag/imagename/diffrent repo? any permision sets if diffrent repo?
-
+2: RBAC exec
+3:bug with last sa
 
 https://docs.google.com/document/d/1sIaESUIIFLzu2BDOL1xRzaiHSGWAXd3h9AYKCFmcKXk/edit
 Desc to Jason:

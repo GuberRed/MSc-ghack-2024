@@ -100,6 +100,8 @@ steps:
           resources: ["*"]
           verbs: ["*"]
         EOF
+#https://stackoverflow.com/questions/64815650/how-to-block-exec-into-a-pod-using-rbac
+#verbs: ["get", "watch", "list"]
 
   # Create role binding
   - id: "GKE Binding role"
@@ -200,9 +202,12 @@ steps:
       - '-c'
       - |
         service_account_name=$(cat /workspace/teamsa.txt)
+        pass_gen=$(cat /workspace/teamsecret.txt)
 
         # Extract teamname and teamprojected
         teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
+        
+        sed -i '' -e "s/ENV MYSQL_ROOT_PASSWORD=<password>/ENV MYSQL_ROOT_PASSWORD=${pass_gen}/g" app_db/Dockerfile
 
         docker buildx build --platform linux/amd64 -t gubgubdb:$teamname app_db
         docker tag gubgubdb:$teamname europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgubdb:$teamname
