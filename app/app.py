@@ -11,7 +11,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 from modules.init.db_con import *
-
+from modules.init.init_database import *
 from modules.login.login import *
 from modules.login.register import *
 from modules.home import *
@@ -36,5 +36,6 @@ def logout():
 
 if __name__ == "__main__":
     time.sleep(5)
+    test_database()
     app.run(host="0.0.0.0", port=5000)
 

@@ -4,13 +4,13 @@ metadata:
   annotations:
     deployment.kubernetes.io/revision: "1"
     kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"gubgub-frontend","namespace":"dispatcher-gcp-coe-msp-sandbox"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"app"}},"template":{"metadata":{"labels":{"app":"app"}},"spec":{"containers":[{"env":[{"name":"MYSQL_PASSWORD","value":"IHateThisGame"}],"image":"europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgub:latest","name":"app","ports":[{"containerPort":5000}]}]}}}}
-  creationTimestamp: "2024-02-24T13:52:11Z"
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"gubgub-frontend","namespace":"autoscaling-pubsub-sa-gcp-coe-msp-sandbox"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"app"}},"template":{"metadata":{"labels":{"app":"app"}},"spec":{"containers":[{"env":[{"name":"MYSQL_PASSWORD","value":"IHateThisGame"}],"image":"europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgub:latest","name":"app","ports":[{"containerPort":5000}]}]}}}}
+  creationTimestamp: "2024-02-26T08:41:43Z"
   generation: 1
   name: gubgub-frontend
-  namespace: dispatcher-gcp-coe-msp-sandbox
-  resourceVersion: "19478"
-  uid: 9994fc79-4505-4748-9bfa-aee2b08bc035
+  namespace: autoscaling-pubsub-sa-gcp-coe-msp-sandbox
+  resourceVersion: "41684"
+  uid: 6d1e433a-eee6-41f5-895b-0dac9eb40d0d
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -32,7 +32,7 @@ spec:
       containers:
       - env:
         - name: MYSQL_PASSWORD
-          value: "111b0db2129e7527cece3429333ac026"
+          value: cb5ab1d66d499f19229982893b7f3f33
         image: europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgub:latest
         imagePullPolicy: Always
         name: app
@@ -49,18 +49,18 @@ spec:
       terminationGracePeriodSeconds: 30
 status:
   conditions:
-  - lastTransitionTime: "2024-02-24T13:52:12Z"
-    lastUpdateTime: "2024-02-24T13:52:12Z"
+  - lastTransitionTime: "2024-02-26T08:41:43Z"
+    lastUpdateTime: "2024-02-26T08:41:45Z"
+    message: ReplicaSet "gubgub-frontend-69c447f775" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2024-02-26T08:42:46Z"
+    lastUpdateTime: "2024-02-26T08:42:46Z"
     message: Deployment does not have minimum availability.
     reason: MinimumReplicasUnavailable
     status: "False"
     type: Available
-  - lastTransitionTime: "2024-02-24T13:52:12Z"
-    lastUpdateTime: "2024-02-24T13:52:12Z"
-    message: ReplicaSet "gubgub-frontend-69c447f775" is progressing.
-    reason: ReplicaSetUpdated
-    status: "True"
-    type: Progressing
   observedGeneration: 1
   replicas: 1
   unavailableReplicas: 1

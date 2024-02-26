@@ -1,3 +1,4 @@
+team_namespace="autoscaling-pubsub-sa-gcp-coe-msp-sandbox"
 kubectl get pods -n $team_namespace
 kubectl describe deployment gubgub-frontend -n $team_namespace
 kubectl get deployment gubgub-frontend -n $team_namespace -o yaml > user_deployment.yaml

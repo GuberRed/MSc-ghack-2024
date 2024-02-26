@@ -1,6 +1,6 @@
 # Replace these variables with your actual values
 ###########################
-export SERVICE_ACCOUNT_EMAIL="access-gd@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
+export SERVICE_ACCOUNT_EMAIL="autoscaling-pubsub-sa@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
 export PROJECT_ID="abel-ghack-infra"
 ############################
 

@@ -1,6 +1,6 @@
 FROM mysql:latest
 
-ENV MYSQL_ROOT_PASSWORD=<password>
+ENV MYSQL_ROOT_PASSWORD=tmppassword
 
 ENV MYSQL_DATABASE=game_db
 

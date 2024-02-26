@@ -7,12 +7,12 @@ services:
     ports:
       - "5550:5000"
     environment:
-      MYSQL_PASSWORD: 111b0db2129e7527cece3429333ac026
+      MYSQL_PASSWORD: "tmppassword"
     depends_on:
-      - db
+      - db-svc
     networks:
       - game-network
-  db:
+  db-svc:
     build:
       context: ../app_db
       dockerfile: Dockerfile
