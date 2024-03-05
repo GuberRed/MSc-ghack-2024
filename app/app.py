@@ -11,10 +11,16 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 from modules.init.db_con import *
+
+from modules.gamemechanic.dungeon import *
 from modules.init.init_database import *
 from modules.login.login import *
 from modules.login.register import *
 from modules.home import *
+
+@app.route("/dungeon", methods=["GET", "POST"])
+def dungeon_enter_route():
+    return dungeon_enter_mod()
 
 @app.route("/", methods=["GET", "POST"])
 def login_route():
