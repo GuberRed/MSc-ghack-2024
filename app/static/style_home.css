@@ -1,5 +1,8 @@
 body {
-  background-color: aquamarine;
+  background-image: url("../static/images/background/background10.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 .info-bar {
   height: 30px;

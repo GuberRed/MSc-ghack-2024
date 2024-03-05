@@ -9,6 +9,8 @@ def register_mod():
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
+        character_class = request.form['character_class']
+        # Connect to the database
         conn = pymysql.connect(host=db_host, user=db_user, password=db_password, db=db_name)
         cursor = conn.cursor()
 
@@ -25,6 +27,17 @@ def register_mod():
             # Insert user into the database
             insert_user_query = f"INSERT INTO users (username, password, email) VALUES ('{username}', '{password}', '{email}')"
             cursor.execute(insert_user_query)
+
+            # Get the user ID
+            user_id = cursor.lastrowid
+
+            # Insert default resources for the user
+            insert_resources_query = f"INSERT INTO resources (user_id, gold, iron, wood, stone, leather) VALUES ({user_id}, 0, 0, 0, 0, 0)"
+            cursor.execute(insert_resources_query)
+
+            # Insert default character for the user
+            insert_character_query = f"INSERT INTO characters (user_id, name, class, level) VALUES ({user_id}, '{username}', '{character_class}', 1)"
+            cursor.execute(insert_character_query)
 
             # Commit the changes
             conn.commit()

@@ -12,5 +12,25 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(100) NOT NULL
 );
 
+-- Create the characters table
+CREATE TABLE IF NOT EXISTS characters (
+    user_id INT NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    class VARCHAR(50) NOT NULL,
+    level INT NOT NULL,
+    experience INT DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS resources (
+  user_id INT,
+  gold INT DEFAULT 0,
+  iron INT DEFAULT 0,
+  wood INT DEFAULT 0,
+  stone INT DEFAULT 0,
+  leather INT DEFAULT 0,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
 INSERT INTO users (username, password, email) VALUES ('test', 'test', 'player1@example.com');
 INSERT INTO users (username, password, email) VALUES ('player2', 'password2', 'player2@example.com');
