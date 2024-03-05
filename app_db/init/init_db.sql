@@ -34,3 +34,9 @@ CREATE TABLE IF NOT EXISTS resources (
 
 INSERT INTO users (username, password, email) VALUES ('test', 'test', 'player1@example.com');
 INSERT INTO users (username, password, email) VALUES ('player2', 'password2', 'player2@example.com');
+
+INSERT INTO characters (user_id, name, class, level, experience) VALUES (1, 'Gfxde', 'Warrior', 1, 0);
+INSERT INTO characters (user_id, name, class, level, experience) VALUES (2, 'Character', 'Rogue', 2, 0);
+
+INSERT INTO resources (user_id, gold, iron, wood, stone, leather) VALUES (1, 100, 50, 200, 150, 10);
+INSERT INTO resources (user_id, gold, iron, wood, stone, leather) VALUES (2, 1200, 520, 2200, 1250, 210);
