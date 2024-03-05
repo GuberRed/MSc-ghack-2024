@@ -3,10 +3,37 @@
     <title>Home - gubgub</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_home.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_module_infobar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_module_leftbar.css') }}">
 </head>
 <body>
     <div class="info-bar">
+        <p class="info-item">{{ character_name }} Level: {{ character_level }}</p>
+        <p class="info-item">Exp: {{ character_exp }}</p>
+        <img class="info-bar-img" src="{{ url_for('static', filename='images/classes/' + character_class.lower() + '1.jpg') }}" alt="{{ character_class }}" class="class-icon">
+        <p class="info-item">Gold: {{ gold }}</p>
+        <p class="info-item">Iron: {{ iron }}</p>
+        <p class="info-item">Wood: {{ wood }}</p>
+        <p class="info-item">Stone: {{ stone }}</p>
+        <p class="info-item">Leather: {{ leather }}</p>
         <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
       </div>
+      <!--<a href="{{ url_for('dungeon_enter_route') }}" class="action-link">Enter Dungeon</a> -->
+      <div class="left-menu">
+        <ul>
+            <li><a href="#">Inventory</a></li>
+            <li><a href="#">Character</a></li>
+            <li><a href="{{ url_for('dungeon_enter_route') }}">Dungeon</a></li>
+            <li><a href="#">Tavern</a></li>
+            <li><a href="#">City</a></li>
+            <li><a href="#">Quest</a></li>
+            <li><a href="#">Shop</a></li>
+            <li><a href="#">Arena</a></li>
+            <li><a href="#">Guild</a></li>
+            <li><a href="#">Leaderboard</a></li>
+            <li><a href="#">Settings</a></li>
+        </ul>
+      </div>
+
 </body>
 </html>
