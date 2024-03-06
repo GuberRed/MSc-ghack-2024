@@ -177,7 +177,16 @@ steps:
         service_account_name=$(cat /workspace/teamsa.txt)
         pass_gen=$(cat /workspace/teamsecret.txt)
         teamname=$(cat /workspace/teamname.txt)
-        
+        echo "#################"
+        pwd
+        echo $pass_gen
+        echo $service_account_name
+        echo $team_name
+        ls -la
+        ls -la app_db
+        cat app_db/Dockerfile
+        ls -la /workspace
+        echo "#################"
         sed -i '' -e "s/ENV MYSQL_ROOT_PASSWORD=tmppassword/ENV MYSQL_ROOT_PASSWORD=${pass_gen}/g" app_db/Dockerfile
 
         docker buildx build --platform linux/amd64 -t gubgubdb:$teamname app_db
