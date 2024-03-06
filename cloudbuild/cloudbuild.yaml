@@ -33,7 +33,7 @@ steps:
         echo $teamprojectid > /workspace/teamprojectid.txt
         
         # Merge teamname and teamprojectid
-        team_namespace=$(cat /workspace/team_namespace.txt)
+        team_namespace="$teamname-$teamprojectid"
         echo $team_namespace > /workspace/team_namespace.txt
 
   # Create role binding
