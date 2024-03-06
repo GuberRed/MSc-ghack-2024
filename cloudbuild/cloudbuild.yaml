@@ -1,5 +1,6 @@
 options:
   logging: CLOUD_LOGGING_ONLY
+#https://cloud.google.com/build/docs/configuring-builds/pass-data-between-steps
 
 steps:
   # get cluster creds
@@ -12,8 +13,7 @@ steps:
       - |
         #!/bin/bash
         gcloud container clusters get-credentials $_CLUSTER_NAME --region $_OPS_REGION --project $_OPS_PROJECT_ID
-        gcloud auth configure-docker \
-        europe-west1-docker.pkg.dev
+        gcloud auth configure-docker europe-west1-docker.pkg.dev
 
   # Get Pub/Sub message
   - id: "Get Pub/Sub message"
@@ -24,6 +24,17 @@ steps:
       - -c
       - |
         gcloud pubsub subscriptions pull "projects/$_OPS_PROJECT_ID/subscriptions/$_OPS_PREFIX-team-create-sub" --format=json --auto-ack | grep data | awk -F'"' '/"data"/ {print $4}' | base64 -d > /workspace/teamsa.txt
+        service_account_name=$(cat /workspace/teamsa.txt)
+        
+        # Extract teamname and teamprojected
+        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
+        echo $teamname > /workspace/teamname.txt
+        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
+        echo $teamprojectid > /workspace/teamprojectid.txt
+        
+        # Merge teamname and teamprojectid
+        team_namespace=$(cat /workspace/team_namespace.txt)
+        echo $team_namespace > /workspace/team_namespace.txt
 
   # Create role binding
   - id: "IAM role container.viewer"
@@ -43,11 +54,6 @@ steps:
         gcloud projects add-iam-policy-binding $_OPS_PROJECT_ID \
         --member=serviceAccount:${service_account_name} \
         --role=roles/iam.serviceAccountTokenCreator
-# gcloud projects add-iam-policy-binding abel-ghack-infra \
-#         --member=serviceAccount:ghack-cluster-sa@abel-ghack-infra.iam.gserviceaccount.com \
-#         --role=roles/artifactregistry.reader
-#         ghack-cluster-sa@abel-ghack-infra.iam.gserviceaccount.com
-
 
   # create team namespace
   - id: "GKE create team namespace"
@@ -58,16 +64,7 @@ steps:
       - -c
       - |
         #!/bin/bash
-        echo $_CLUSTER_NAME
-        _CLUSTER_NAME="newclusterteeeest"
-        service_account_name=$(cat /workspace/teamsa.txt)
-
-        # Extract teamname and teamprojected
-        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
-        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
-        
-        # Merge teamname and teamprojectid
-        team_namespace="${teamname}-${teamprojectid}"
+        team_namespace=$(cat /workspace/team_namespace.txt)
 
         # Create Kubernetes namespace
         kubectl create namespace "$team_namespace"
@@ -81,14 +78,7 @@ steps:
       - -c
       - |
         #!/bin/bash
-        service_account_name=$(cat /workspace/teamsa.txt)
-        echo $_CLUSTER_NAME
-        # Extract teamname and teamprojected
-        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
-        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
-        
-        # Merge teamname and teamprojectid
-        team_namespace="${teamname}-${teamprojectid}"
+        team_namespace=$(cat /workspace/team_namespace.txt)
 
         #actual role creation
         cat <<EOF | kubectl apply -f -
@@ -115,13 +105,7 @@ steps:
       - |
         #!/bin/bash
         service_account_name=$(cat /workspace/teamsa.txt)
-        echo $_CLUSTER_NAME
-        # Extract teamname and teamprojected
-        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
-        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
-        
-        # Merge teamname and teamprojectid
-        team_namespace="${teamname}-${teamprojectid}"
+        team_namespace=$(cat /workspace/team_namespace.txt)
 
         # Create role binding
         cat <<EOF | kubectl apply -f -
@@ -138,8 +122,8 @@ steps:
         - kind: User
           name: "${service_account_name}"
           apiGroup: rbac.authorization.k8s.io
-
         EOF
+
   # create team secret
   - id: "Secret generate pass"
     name: "gcr.io/cloud-builders/gcloud"
@@ -149,15 +133,7 @@ steps:
       - -c
       - |
         #!/bin/bash
-        service_account_name=$(cat /workspace/teamsa.txt)
-        echo $_CLUSTER_NAME
-
-        # Extract teamname and teamprojected
-        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
-        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
-        
-        # Merge teamname and teamprojectid
-        team_namespace="${teamname}-${teamprojectid}"
+        team_namespace=$(cat /workspace/team_namespace.txt)
 
         # Create a secret for the team
         gcloud secrets create "$team_namespace" --project="$_OPS_PROJECT_ID"
@@ -187,13 +163,7 @@ steps:
       - |
         #!/bin/bash
         service_account_name=$(cat /workspace/teamsa.txt)
-
-        # Extract teamname and teamprojected
-        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
-        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
-        
-        # Merge teamname and teamprojectid
-        team_namespace="${teamname}-${teamprojectid}"
+        team_namespace=$(cat /workspace/team_namespace.txt)
 
         gcloud secrets add-iam-policy-binding "$team_namespace" --member="serviceAccount:$service_account_name" --role="roles/secretmanager.secretAccessor" --project="$_OPS_PROJECT_ID"
 
@@ -206,9 +176,7 @@ steps:
       - |
         service_account_name=$(cat /workspace/teamsa.txt)
         pass_gen=$(cat /workspace/teamsecret.txt)
-
-        # Extract teamname and teamprojected
-        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
+        teamname=$(cat /workspace/teamname.txt)
         
         sed -i '' -e "s/ENV MYSQL_ROOT_PASSWORD=tmppassword/ENV MYSQL_ROOT_PASSWORD=${pass_gen}/g" app_db/Dockerfile
 
@@ -225,15 +193,7 @@ steps:
       - -c
       - |
         #!/bin/bash
-        service_account_name=$(cat /workspace/teamsa.txt)
-        pass_gen=$(cat /workspace/teamsecret.txt)
-
-        # Extract teamname and teamprojected
-        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
-        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
-        
-        # Merge teamname and teamprojectid
-        team_namespace="${teamname}-${teamprojectid}"
+        team_namespace=$(cat /workspace/team_namespace.txt)
         
         #db-svc
         cat <<EOF | kubectl apply -f -
@@ -260,17 +220,9 @@ steps:
       - -c
       - |
         #!/bin/bash
-        service_account_name=$(cat /workspace/teamsa.txt)
-        pass_gen=$(cat /workspace/teamsecret.txt)
-
-        # Extract teamname and teamprojected
-        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
-        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
+        teamname=$(cat /workspace/team_name.txt)
+        team_namespace=$(cat /workspace/team_namespace.txt)
         
-        # Merge teamname and teamprojectid
-        team_namespace="${teamname}-${teamprojectid}"
-        
-
         #db-pod
         cat <<EOF | kubectl apply -f -
         apiVersion: v1
@@ -297,17 +249,8 @@ steps:
       - -c
       - |
         #!/bin/bash
-        service_account_name=$(cat /workspace/teamsa.txt)
-        pass_gen=$(cat /workspace/teamsecret.txt)
-
-        # Extract teamname and teamprojected
-        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
-        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
+        team_namespace=$(cat /workspace/team_namespace.txt)
         
-        # Merge teamname and teamprojectid
-        team_namespace="${teamname}-${teamprojectid}"
-        
-
         #app-deployment
         cat <<EOF | kubectl apply -f -
         apiVersion: apps/v1
@@ -337,23 +280,13 @@ steps:
   # deploy service loadbalancer
   - id: "GKE - Deploy svc-lb"
     name: "gcr.io/cloud-builders/gcloud"
-    #dir: "cloudbuild/Kubernetes"
     entrypoint: "bash"
     args:
       - -x
       - -c
       - |
         #!/bin/bash
-        service_account_name=$(cat /workspace/teamsa.txt)
-        pass_gen=$(cat /workspace/teamsecret.txt)
-
-        # Extract teamname and teamprojected
-        teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
-        teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
-        
-        # Merge teamname and teamprojectid
-        team_namespace="${teamname}-${teamprojectid}"
-        
+        team_namespace=$(cat /workspace/team_namespace.txt)
 
         #svc-lb
         cat <<EOF | kubectl apply -f -
