@@ -223,7 +223,7 @@ steps:
       - -c
       - |
         #!/bin/bash
-        teamname=$(cat /workspace/team_name.txt)
+        teamname=$(cat /workspace/teamname.txt)
         team_namespace=$(cat /workspace/team_namespace.txt)
         
         #db-pod
