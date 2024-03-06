@@ -1,4 +1,4 @@
-PROBLEM WITH SECRET IN DB after new app deploy
+to do cleaner gke deployment incloudbuild
 
 https://docs.google.com/document/d/1sIaESUIIFLzu2BDOL1xRzaiHSGWAXd3h9AYKCFmcKXk/edit
 Desc to Jason:
