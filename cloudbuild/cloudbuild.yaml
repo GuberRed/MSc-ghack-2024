@@ -58,6 +58,8 @@ steps:
       - -c
       - |
         #!/bin/bash
+        echo $_CLUSTER_NAME
+        _CLUSTER_NAME="newclusterteeeest"
         service_account_name=$(cat /workspace/teamsa.txt)
 
         # Extract teamname and teamprojected
@@ -80,7 +82,7 @@ steps:
       - |
         #!/bin/bash
         service_account_name=$(cat /workspace/teamsa.txt)
-
+        echo $_CLUSTER_NAME
         # Extract teamname and teamprojected
         teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
         teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
@@ -113,7 +115,7 @@ steps:
       - |
         #!/bin/bash
         service_account_name=$(cat /workspace/teamsa.txt)
-
+        echo $_CLUSTER_NAME
         # Extract teamname and teamprojected
         teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
         teamprojectid=$(echo "$service_account_name" | awk -F'[@.]' '{print $2}')
@@ -148,6 +150,7 @@ steps:
       - |
         #!/bin/bash
         service_account_name=$(cat /workspace/teamsa.txt)
+        echo $_CLUSTER_NAME
 
         # Extract teamname and teamprojected
         teamname=$(echo "$service_account_name" | awk -F'[@.]' '{print $1}')
