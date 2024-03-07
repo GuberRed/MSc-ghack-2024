@@ -12,11 +12,6 @@ resource "google_cloudfunctions_function" "ghack-front-function" {
   available_memory_mb = 256
   timeout             = 60
 
-  environment_variables = {
-    PREFIX = "${var.prefix}"
-    OPS_PROJECT = "${var.ops_project}"
-  }
-
   trigger_http = true
 
 }
@@ -32,6 +27,3 @@ resource "google_storage_bucket_object" "archive" {
   source = "../cf"
 }
 
-resource "google_pubsub_topic" "trigger_topic" {
-  name = "${var.prefix}-topic"
-}
