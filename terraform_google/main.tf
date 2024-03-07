@@ -60,3 +60,12 @@ resource "google_artifact_registry_repository" "ghack-docker-repo" {
   description   = "Repo for Ghack app"
   format        = "DOCKER"
 }
+
+module "cloud_function" {
+  source       = "./modules/cloudfunction"
+  ops_project  = var.ops_project
+  prefix       = var.prefix
+  ops_region   = var.ops_region
+
+  depends_on = [module.cloud_build]
+}
