@@ -1,5 +1,5 @@
 resource "google_cloudfunctions_function" "ghack-front-function" {
-  name        = "${prefix}-function"
+  name        = "${var.prefix}-function"
   description = "Obtain team sa and process team initiation via cloud build"
   runtime     = "python39"
   entry_point = "handle_request"
