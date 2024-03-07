@@ -7,7 +7,7 @@ resource "google_cloudfunctions_function" "ghack-front-function" {
   region      = var.ops_region
 
   source_archive_bucket = google_storage_bucket.cfbucket.name
-  source_archive_object = "cloudfunction.zip"
+  source_archive_object = "ghackcf.zip"
 
   available_memory_mb = 256
   timeout             = 60
@@ -27,9 +27,9 @@ resource "google_storage_bucket" "cfbucket" {
 }
 
 resource "google_storage_bucket_object" "archive" {
-  name   = "cloudfunction.zip"
+  name   = "ghackcf.zip"
   bucket = google_storage_bucket.cfbucket.name
-  source = "../terraform_kubernetes/cf"
+  source = "../cf"
 }
 
 resource "google_pubsub_topic" "trigger_topic" {
