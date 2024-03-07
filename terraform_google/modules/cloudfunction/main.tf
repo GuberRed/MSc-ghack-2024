@@ -1,23 +1,37 @@
-# Define the Cloud Function
-resource "google_cloudfunctions_function" "ghack_" {
-  name        = "my-function"
-  description = "My Cloud Function"
-  runtime     = "nodejs14"
+resource "google_cloudfunctions_function" "ghack-front-function" {
+  name        = "${prefix}-function"
+  description = "Obtain team sa and process team initiation via cloud build"
+  runtime     = "python39"
+  entry_point = "handle_request"
+  project     = var.ops_project
+  region      = var.ops_region
 
-  entry_point = "myFunction"
-  source_archive_bucket = "your-source-bucket"
-  source_archive_object = "path/to/function.zip"
+  source_archive_bucket = google_storage_bucket.cfbucket.name
+  source_archive_object = "cloudfunction.zip"
 
-  # Define the HTTP trigger
+  available_memory_mb = 256
+  timeout             = 60
+
+  environment_variables = {
+    PREFIX = "${var.prefix}"
+    OPS_PROJECT = "${var.ops_project}"
+  }
+
   trigger_http = true
 
-  # Prevent the function from being deleted
-  lifecycle {
-    prevent_destroy = true
-  }
+}
 
-  # Define the environment variables
-  environment_variables = {
-    SERVICE_ACCOUNT_REGEX = "A"  # Add your regex pattern here
-  }
+resource "google_storage_bucket" "cfbucket" {
+  name     = "${var.prefix}-bucket"
+  location = "eu"
+}
+
+resource "google_storage_bucket_object" "archive" {
+  name   = "cloudfunction.zip"
+  bucket = google_storage_bucket.cfbucket.name
+  source = "../terraform_kubernetes/cf"
+}
+
+resource "google_pubsub_topic" "trigger_topic" {
+  name = "${var.prefix}-topic"
 }
