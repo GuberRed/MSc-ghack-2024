@@ -19,6 +19,7 @@ resource "google_cloudfunctions_function" "ghack-front-function" {
 resource "google_storage_bucket" "cfbucket" {
   name     = "${var.prefix}-bucket"
   location = "eu"
+  force_destroy = true
 }
 
 resource "google_storage_bucket_object" "archive" {
