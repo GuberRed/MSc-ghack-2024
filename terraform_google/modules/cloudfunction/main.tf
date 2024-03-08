@@ -25,7 +25,7 @@ resource "google_storage_bucket" "cfbucket" {
 resource "google_storage_bucket_object" "archive" {
   name   = "ghackcfinit.zip"
   bucket = google_storage_bucket.cfbucket.name
-  source = "../modules/cloudfunction/ghackcfinit.zip"
+  source = "../modules/cloudfunction"
 }
 
 resource "google_cloudfunctions_function_iam_binding" "iam_public_access_for_cf" {
