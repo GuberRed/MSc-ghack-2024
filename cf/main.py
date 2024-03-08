@@ -36,7 +36,7 @@ def team_init(request):  # Add request as an argument
         service_account = request.form.get('service_account')
         project_id = extract_project_id(service_account)
         if verify_service_account(project_id, service_account):
-            message_data = f'Logged in successfully as {service_account}!'
+            message_data = f'{service_account}'
             message_bytes = message_data.encode('utf-8')
             publisher.publish(topic_path, data=message_bytes)
             return 'Message published to Pub/Sub.'
