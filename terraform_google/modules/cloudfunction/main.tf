@@ -28,3 +28,14 @@ resource "google_storage_bucket_object" "archive" {
   source = "../cf"
 }
 
+resource "google_cloudfunctions_function_iam_binding" "iam_public_access_for_cf" {
+  project = var.ops_project
+  region  = var.ops_region
+  cloud_function = google_cloudfunctions_function.ghack-front-function.name
+
+  role    = "roles/cloudfunctions.invoker"
+
+  members = [
+    "allUsers"
+  ]
+}
