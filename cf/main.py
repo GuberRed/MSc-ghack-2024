@@ -1,5 +1,8 @@
 from flask import Flask, request #, render_template
 from google.cloud import pubsub_v1
+from google.oauth2 import service_account
+from googleapiclient import discovery
+import google.auth
 import re
 
 app = Flask(__name__)
@@ -7,18 +10,35 @@ app = Flask(__name__)
 publisher = pubsub_v1.PublisherClient()
 topic_path = publisher.topic_path("abel-ghack-infra", "ghack-team-create-topic")
 
-def is_valid_service_account(service_account):
-    pattern = r'^[a-zA-Z0-9-_]+@[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+$'
-    return bool(re.match(pattern, service_account))
+def extract_project_id(service_account_email):
+    parts = service_account_email.split('@')
+    if len(parts) == 2:
+        project_id = parts[1].split('.')[0]
+        return project_id
+    else:
+        return None
+
+def verify_service_account(project_id, service_account_email):
+    credentials, _ = google.auth.default()
+    iam_service = discovery.build('iam', 'v1', credentials=credentials)
+    try:
+        iam_service.projects().serviceAccounts().get(
+            name=f"projects/{project_id}/serviceAccounts/{service_account_email}"
+        ).execute()
+        return True
+    except Exception as e:
+        print(f"Error verifying service account: {e}")
+        return False
 
 @app.route('/', methods=['GET', 'POST'])
-def handle_request(request):  # Add request as an argument
+def team_init(request):  # Add request as an argument
     if request.method == 'POST':
         service_account = request.form.get('service_account')
-        if is_valid_service_account(service_account):
-            # message_data = f'Logged in successfully as {serviceaccount}!'
-            # message_bytes = message_data.encode('utf-8')
-            # publisher.publish(topic_path, data=message_bytes)
+        project_id = extract_project_id(service_account)
+        if verify_service_account(project_id, service_account):
+            message_data = f'Logged in successfully as {service_account}!'
+            message_bytes = message_data.encode('utf-8')
+            publisher.publish(topic_path, data=message_bytes)
             return 'Message published to Pub/Sub.'
         else:
             return 'Invalid service account.'
