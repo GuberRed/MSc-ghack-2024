@@ -1,2 +1,2 @@
-rm ghackcf.zip
-zip -r ghackcf.zip .
+rm ghackcfinit.zip
+zip -r ghackcfinit.zip .
