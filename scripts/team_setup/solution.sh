@@ -1,4 +1,4 @@
-team_namespace="test08-gcp-coe-msp-sandbox"
+team_namespace="piotr-case2-gcp-coe-msp-sandbox"
 kubectl get pods -n $team_namespace
 kubectl describe deployment gubgub-frontend -n $team_namespace
 kubectl get deployment gubgub-frontend -n $team_namespace -o yaml > user_deployment.yaml

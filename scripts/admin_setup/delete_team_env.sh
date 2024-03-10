@@ -1,6 +1,6 @@
 # Replace these variables with your actual values
 ###########################
-export SERVICE_ACCOUNT_EMAIL="test08@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
+export SERVICE_ACCOUNT_EMAIL="piotr-case2@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
 ############################
 
 #namespace

@@ -1,4 +1,29 @@
-to do cleaner gke deployment incloudbuild
+#pre:
+1. make sure there is no secrets (script/admin_setup/clean_secrets.sh)
+2. make sure terraform is destroyed (terraform cloud)
+
+#RUN:
+1. admin - run terraform
+2. admin - publish docker image (scripts/admin_setup/init_apppublish.sh) ps. you have to be in /app folder and run it
+3. team - service account viewer (scripts/team_setup/user_viewersa.sh)
+4. team - publish sa name to cloud function (https://europe-west1-abel-ghack-infra.cloudfunctions.net/ghack-function)
+5. team - impersonate as service account in terminal (scripts/team_setup/user_init)
+6. team - fix deployemnt - (scripts/team_setup/solution.sh)
+7. team - challange done
+8. team - clean config (OPTIONALY) - (scripts/team_setup/clean_config.sh)
+
+#Restart single team env
+1. admin - run (scripts/admin_setup/delete_team_env.sh) make sure you provided correct service account
+2. team - get back to #RUN#step4
+
+#cleanup:
+1. script clean secrets (script/admin_setup/team_setup/clean_secrets.sh)
+2. terraform destroy (terraform cloud)
+
+
+to test:
+-DONE what if user wants to restart env - works #Restart single team env
+-DONE what if user publish service account more than 1 time - (tested 5 times - cannot create namespace if exist)
 
 https://docs.google.com/document/d/1sIaESUIIFLzu2BDOL1xRzaiHSGWAXd3h9AYKCFmcKXk/edit
 Desc to Jason:
