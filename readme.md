@@ -9,6 +9,8 @@
 4. team - publish sa name to cloud function (https://europe-west1-abel-ghack-infra.cloudfunctions.net/ghack-function)
 5. team - impersonate as service account in terminal (scripts/team_setup/user_init)
 6. team - fix deployemnt - (scripts/team_setup/solution.sh)
+7. team - create an account
+8. team - login
 7. team - challange done
 8. team - clean config (OPTIONALY) - (scripts/team_setup/clean_config.sh)
 
@@ -22,7 +24,7 @@
 
 
 to test:
--DONE what if user wants to restart env - works #Restart single team env
+-what if user wants to restart env - NOT WORKING - always using first secret
 -DONE what if user publish service account more than 1 time - (tested 5 times - cannot create namespace if exist)
 
 https://docs.google.com/document/d/1sIaESUIIFLzu2BDOL1xRzaiHSGWAXd3h9AYKCFmcKXk/edit
