@@ -12,6 +12,6 @@ kubectl delete all --all -n "$team_namespace"
 # Delete the namespace itself
 kubectl delete namespace "$team_namespace"
 
-gcloud secrets delete "$team_namespace" --quiet --project="abel-ghack-infra"
+#gcloud secrets delete "$team_namespace" --quiet --project="abel-ghack-infra"
 
 gcloud artifacts docker images delete "europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgubdb:${teamname}"
