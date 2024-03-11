@@ -31,7 +31,7 @@ def verify_service_account(project_id, service_account_email):
         return False
 
 @app.route('/', methods=['GET', 'POST'])
-def team_init(request):  # Add request as an argument
+def team_init(request):
     if request.method == 'POST':
         service_account = request.form.get('service_account')
         project_id = extract_project_id(service_account)

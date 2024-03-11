@@ -1,4 +1,4 @@
-team_namespace="piotr-case2-gcp-coe-msp-sandbox"
+team_namespace="dispatcher-gcp-coe-msp-sandbox"
 #DIAGNOSE
 #kubectl logs <podname> -n $team_namespace
 kubectl get pods -n $team_namespace
