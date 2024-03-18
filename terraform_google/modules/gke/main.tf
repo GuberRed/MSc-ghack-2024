@@ -19,7 +19,7 @@ resource "google_container_cluster" "ghack_cluster" {
 resource "google_container_node_pool" "ghack_cluster_node_pool" {
   name       = "${var.prefix}-np"
   cluster    = google_container_cluster.ghack_cluster.id
-  node_count = 3
+  node_count = 1
 
   node_config {
     preemptible  = true

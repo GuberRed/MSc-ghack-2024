@@ -7,6 +7,8 @@
 2. admin - publish docker image (scripts/admin_setup/init_apppublish.sh) ps. you have to be in /app folder and run it
 
 #hackatron begins
+#ROLES NEEDED
+-iam.serviceAccounts.getAccessToken or roles/iam.serviceAccountViewer TOTEST
 1. team - service account viewer (scripts/team_setup/user_viewersa.sh)
 2. team - publish sa name to cloud function (https://europe-west1-abel-ghack-infra.cloudfunctions.net/ghack-function)
 3. team - impersonate as service account in terminal (scripts/team_setup/user_init)
@@ -15,6 +17,8 @@
 6. team - login
 7. team - challange done
 8. team - clean config (OPTIONALY) - (scripts/team_setup/clean_config.sh)
+
+add namespace to description
 
 #Restart single team env
 1. admin - run (scripts/admin_setup/delete_team_env.sh) make sure you provided correct service account

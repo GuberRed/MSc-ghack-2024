@@ -1,0 +1,243 @@
+import { FC, useState } from "react"
+import { Props } from "./Challenge.types"
+import { Box, Typography, Link, List, ListItem, Divider } from "@mui/material"
+import InputFields from "./InputFields";
+import GHAlert from "../GHAlert/GHAlert";
+import VerificationBox from "./VerificationBox";
+
+const InfraChallenge: FC<Props> = ({
+    user,
+}) => {
+    const [serviceAccountInit, setServiceAccountInit] = useState("");
+    const [serviceAccount, setServiceAccount] = useState("");
+    const [secretString, setSecretString] = useState("");
+    
+    const [isProgressingInit, setIsProgressingInit] = useState(false);
+    const [isProgressingSubmit, setIsProgressingSubmit] = useState(false);
+
+    const [alertMsgInit, setAlertMsgInit] = useState<string>("");
+    const [alertTypeInit, setAlertTypeInit] = useState<"error" | "success" | "warning">("error");
+    const [alertMsgSubmit, setAlertMsgSubmit] = useState<string>("");
+    const [alertTypeSubmit, setAlertTypeSubmit] = useState<"error" | "success" | "warning">("error");
+
+    const submitAnswer = async () => {
+        const idToken = await user?.getIdToken();
+        
+        // Check arguments
+        if (!serviceAccount) {
+          setAlertMsgSubmit("Service Account Email is required");
+          setAlertTypeSubmit("error");
+          return;
+        }
+        
+        if (!secretString) {
+          setAlertMsgSubmit("Secret String is required");
+          setAlertTypeSubmit("error");
+          return;
+        }
+    
+        // Prepare fetch options
+        const options = {
+          method: "POST",
+          mode: "cors" as RequestMode,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + idToken,
+          },
+          body: JSON.stringify({
+            challenge: "infrastructure",
+            additional_info: {
+                service_account: serviceAccount,
+                secret: secretString
+            },
+          }),
+        };
+    
+        // Start isProcessing animation for the button
+        setIsProgressingSubmit(true);
+    
+        // Fetch informations
+        try {
+          const res = await fetch(
+            'https://europe-west1-ghack-test-platform.cloudfunctions.net/infra-check-2024',
+            options
+          );
+          const body = await res.text();
+
+          if (res.ok) {
+            setAlertMsgSubmit("Infrastructure Challenge submitted successfully. " + body);
+            setAlertTypeSubmit("success");
+          } else {
+            setAlertMsgSubmit(body);
+            setAlertTypeSubmit("error");
+          }
+        } catch (error) {
+          setAlertMsgSubmit(""+error);
+          setAlertTypeSubmit("error");
+        }
+    
+        // Stop isProcessing animation for the button
+        setIsProgressingSubmit(false);
+      };
+
+    const submitSAEmail = async () => {
+      const idToken = await user?.getIdToken();
+
+      // Check argument
+      if (!serviceAccountInit) {
+        setAlertMsgInit("Service Account Email is required");
+        setAlertTypeInit("error");
+        return;
+      }
+  
+      const options = {
+        method: "POST",
+        mode: "cors" as RequestMode,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + idToken,
+        },
+        body: JSON.stringify({
+          service_account: serviceAccountInit
+        }),
+      };
+  
+      setIsProgressingInit(true);
+  
+      try {
+        const res = await fetch(
+          "https://europe-west1-abel-ghack-infra.cloudfunctions.net/ghack-function",
+          options
+        );
+        const body = await res.text();
+        if (res.ok) {
+          setAlertMsgInit("SA email submitted successfully. " + body);
+          setAlertTypeInit("success");
+        } else {
+          setAlertMsgInit(body);
+          setAlertTypeInit("error");
+        }
+      } catch (error) {
+        setAlertMsgInit("Errors submitting SA email " + error);
+        setAlertTypeInit("error");
+      }
+  
+      setIsProgressingInit(false);
+    };
+    
+	return (
+		<Box>
+			<Typography variant="h4" gutterBottom>
+				Infrastructure Challenge
+			</Typography>
+			<Typography variant="h6" sx={{ mb: "2rem" }}>
+                by{" "}
+                <Link href="https://www.linkedin.com/in/abel-szabo/">Abel Szabo</Link>{" "}and{" "}
+                <Link href="https://www.linkedin.com/in/adam-gubernat-499263193/">Adam Gubernat</Link>
+            </Typography>
+            <Typography variant="h5" gutterBottom>
+                Objective
+            </Typography>
+            <Typography gutterBottom>
+            	You're part of a team at Starlight Citadel Games, tasked with deploying the first pre-alpha version of a new adventure game to a Kubernetes cluster. 
+            	While security is taken as the highest priority, so your access will be limited, the admins had an argument about the database credentials, which 
+            	has sent one of them to hospital and the wrong credentials to the deployment. This application is very important to the company as they see their 
+            	future success in it, so make sure that it can be up and running as fast as possible!
+            </Typography>
+            <Typography variant="h5" gutterBottom>
+                Details you might need for your commands
+            </Typography>
+            <List sx={{ listStyleType: "disc", pl: 4 }}>
+            	<ListItem sx={{ display: "list-item" }}>
+            		Cluster name: ghack-cluster
+            	</ListItem>
+            	<ListItem sx={{ display: "list-item" }}>
+            		Cluster location: europe-west1
+            	</ListItem>
+            	<ListItem sx={{ display: "list-item" }}>
+            		Project for cluster and secret: abel-ghack-infra
+            	</ListItem>
+            	<ListItem sx={{ display: "list-item" }}>
+            		GKE NS: serviceaccount-projectname (example: hello-g-hack with a serviceaccount hello@g-hack.iam.gserviceaccount.com)
+            	</ListItem>
+            	<ListItem sx={{ display: "list-item" }}>
+            		Secret (not in GKE): same as NS
+            	</ListItem>
+            </List>
+            <Typography variant="h5" gutterBottom>
+                Tasks
+            </Typography>
+            <List sx={{ listStyleType: "disc", pl: 4 }}>
+            	<ListItem sx={{ display: "list-item" }}>
+            		Create a new Service Account in your project!
+            	</ListItem>
+                <ListItem sx={{ display: "list-item" }}>
+                    Input this Service Account email to the GHack portal (Challenge Initiation) to make it create your environment in a multitenant GKE cluster in the abel-ghack-infra project. It can take up to 5 minutes
+                </ListItem>
+                <ListItem sx={{ display: "list-item" }}>
+            		If successful (you have to find it out the hard way), your Service Account will be able to access your namespace in the cluster, and a (non-Kubernetes) secret in the abel-ghack-infra project. (Your personal account will not.)
+            	</ListItem>
+                <ListItem sx={{ display: "list-item" }}>
+                    Access to the namespace (using console)! You may need more IAM in your project to authenticate successfully. Also, take propagation delay into consideration!
+                </ListItem>
+                <ListItem sx={{ display: "list-item" }}>
+                    Find the deployed (but failing) game. It has a frontend (gubgub-frontend), which should be failing and a database (gubgub-db) which should be Running.
+                </ListItem>
+                <ListItem sx={{ display: "list-item" }}>
+                    The frontend needs their credentials fixed. Get the credentials! (Tip: there is a service in GCP for managing secrets, I would look for a secret under the same name as your namespace…)
+                </ListItem>
+                <ListItem sx={{ display: "list-item" }}>
+                    Fix the frontend with redeploying the manifest with the correct creds! It is fixed if it reaches the Running state.
+                </ListItem>
+            </List>
+            <Typography gutterBottom>
+                If you’re done with the challenge or think that you reached a point where you will not continue from, go back to the GHack portal and enter your Service Account email for challenge evaluation!
+                Use Challenge Submission for submitting your work and NOT Challenge Initiation!
+            </Typography>
+            <br/>
+            <Divider/>
+            <br/>
+            <Typography variant="h5" gutterBottom>
+              Challenge Initiation (after you have created a Service Account in your project)
+            </Typography>
+            <List sx={{ listStyleType: "disc", pl: 4 }}>
+              <ListItem sx={{ display: "list-item" }}>
+                Paste your Service Account email here and start the init script (that one which can run up to 5 minutes)
+              </ListItem>
+            </List>
+            <InputFields
+            isProgressing={isProgressingInit}
+            submitAnswer={(submitSAEmail)}
+            items={[{"setter": setServiceAccountInit, "label": "Service Account email", "fieldLength": 400}]}
+            buttonText="Submit SA email"
+            />
+            {alertMsgInit != "" &&
+              <GHAlert
+                alertMsg={alertMsgInit}
+                setAlertMsg={setAlertMsgInit}
+                severity={alertTypeInit}/>
+            }
+            <br/>
+            <Divider/>
+            <br/>
+            <VerificationBox
+            isProgressing={isProgressingSubmit}
+            submitAnswer={(submitAnswer)}
+            items={[
+              {"setter": setServiceAccount, "label": "Service Account", "fieldLength": 400}, 
+              {"setter": setSecretString, "label": "Secret string", "fieldLength": 400}]}
+            />
+            {alertMsgSubmit != "" &&
+              <GHAlert
+                alertMsg={alertMsgSubmit}
+                setAlertMsg={setAlertMsgSubmit}
+                severity={alertTypeSubmit}/>
+            }
+		</Box>
+	)
+}
+
+
+export default InfraChallenge;
