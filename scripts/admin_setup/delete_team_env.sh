@@ -1,6 +1,6 @@
 # Replace these variables with your actual values
 ###########################
-export SERVICE_ACCOUNT_EMAIL="tagger@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
+export SERVICE_ACCOUNT_EMAIL="dispatcher@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
 ############################
 
 #namespace
@@ -12,6 +12,6 @@ kubectl delete all --all -n "$team_namespace"
 # Delete the namespace itself
 kubectl delete namespace "$team_namespace"
 
-#gcloud secrets delete "$team_namespace" --quiet --project="abel-ghack-infra"
+gcloud secrets delete "$team_namespace" --quiet --project="abel-ghack-infra"
 
-gcloud artifacts docker images delete "europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgubdb:${teamname}"
+gcloud artifacts docker images delete "europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgubdb:${team_namespace}"

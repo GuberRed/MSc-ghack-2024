@@ -137,7 +137,7 @@ steps:
         
         if gcloud secrets describe "$team_namespace" --project="$_OPS_PROJECT_ID" &> /dev/null; then
             secret_value=$(gcloud secrets versions access latest --secret="$team_namespace" --project="$_OPS_PROJECT_ID")
-            #echo $secret_value > /workspace/teamsecret.txt
+            echo $secret_value > /workspace/teamsecret.txt
         else
             # Secret does not exist, create a new secret for the team
             gcloud secrets create "$team_namespace" --project="$_OPS_PROJECT_ID"
@@ -184,6 +184,7 @@ steps:
         echo "#################"
         ls -la app_db
         cat app_db/Dockerfile
+        pwd
         sed -i '' -e "s/ENV MYSQL_ROOT_PASSWORD=tmppassword/ENV MYSQL_ROOT_PASSWORD=${pass_gen}/g" app_db/Dockerfile
         cat app_db/Dockerfile
         echo "#################"
@@ -218,36 +219,7 @@ steps:
               targetPort: 3306
         EOF
 
-  # # deploy services manifest
-  # - id: "GKE - Deploy db"
-  #   name: "gcr.io/cloud-builders/gcloud"
-  #   entrypoint: "bash"
-  #   args:
-  #     - -x
-  #     - -c
-  #     - |
-  #       #!/bin/bash
-  #       teamname=$(cat /workspace/teamname.txt)
-  #       team_namespace=$(cat /workspace/team_namespace.txt)
-        
-  #       #db-pod
-  #       cat <<EOF | kubectl apply -f -
-  #       apiVersion: v1
-  #       kind: Pod
-  #       metadata:
-  #         labels:
-  #           app: db
-  #         name: gubgub-db
-  #         namespace: $team_namespace
-  #       spec:
-  #         restartPolicy: Always
-  #         containers:
-  #         - name: db
-  #           image: europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgubdb:$team_namespace
-  #           ports:
-  #           - containerPort: 3306
-  #       EOF
-  # deploy services manifest ##########################
+  # deploy services manifest
   - id: "GKE - Deploy db"
     name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
@@ -256,31 +228,60 @@ steps:
       - -c
       - |
         #!/bin/bash
+        teamname=$(cat /workspace/teamname.txt)
         team_namespace=$(cat /workspace/team_namespace.txt)
         
-        #app-deployment
+        #db-pod
         cat <<EOF | kubectl apply -f -
-        apiVersion: apps/v1
-        kind: Deployment
+        apiVersion: v1
+        kind: Pod
         metadata:
+          labels:
+            app: db
           name: gubgub-db
           namespace: $team_namespace
         spec:
-          replicas: 1
-          selector:
-            matchLabels:
-              app: db
-          template:
-            metadata:
-              labels:
-                app: db
-            spec:
-              containers:
-              - name: db
-                image: europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgubdb:$team_namespace
-                ports:
-                - containerPort: 3306
+          restartPolicy: Always
+          containers:
+          - name: db
+            image: europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgubdb:$team_namespace
+            ports:
+            - containerPort: 3306
         EOF
+  # deploy services manifest ##########################
+  # - id: "GKE - Deploy db"
+  #   name: "gcr.io/cloud-builders/gcloud"
+  #   entrypoint: "bash"
+  #   args:
+  #     - -x
+  #     - -c
+  #     - |
+  #       #!/bin/bash
+  #       team_namespace=$(cat /workspace/team_namespace.txt)
+        
+  #       #app-deployment
+  #       cat <<EOF | kubectl apply -f -
+  #       apiVersion: apps/v1
+  #       kind: Deployment
+  #       metadata:
+  #         name: gubgub-db
+  #         namespace: $team_namespace
+  #       spec:
+  #         replicas: 1
+  #         selector:
+  #           matchLabels:
+  #             app: db
+  #         template:
+  #           metadata:
+  #             labels:
+  #               app: db
+  #           spec:
+  #             containers:
+  #             - name: db
+  #               image: europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgubdb:$team_namespace
+  #               ports:
+  #               - containerPort: 3306
+  #       EOF
   #deploy app
   - id: "GKE - Deploy app"
     name: "gcr.io/cloud-builders/gcloud"

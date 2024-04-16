@@ -8,7 +8,7 @@ export PROJECT_ID="abel-ghack-infra"
 export team_namespace="$(echo "$SERVICE_ACCOUNT_EMAIL" | awk -F'[@.]' '{print $1}')-$(echo "$SERVICE_ACCOUNT_EMAIL" | awk -F'[@.]' '{print $2}')"
 
 #publish pubsub
-#gcloud pubsub topics publish projects/abel-ghack-infra/topics/ghack-team-create-topic --message $SERVICE_ACCOUNT_EMAIL
+gcloud pubsub topics publish projects/abel-ghack-infra/topics/ghack-team-create-topic --message $SERVICE_ACCOUNT_EMAIL
 
 # Create a new gcloud configuration
 gcloud config configurations create ghackinfra
