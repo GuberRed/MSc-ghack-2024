@@ -230,6 +230,7 @@ steps:
         #!/bin/bash
         teamname=$(cat /workspace/teamname.txt)
         team_namespace=$(cat /workspace/team_namespace.txt)
+        pass_gen=$(cat /workspace/teamsecret.txt)
         
         #db-pod
         cat <<EOF | kubectl apply -f -
@@ -247,6 +248,9 @@ steps:
             image: europe-west1-docker.pkg.dev/abel-ghack-infra/ghack-docker-repo/gubgubdb:$team_namespace
             ports:
             - containerPort: 3306
+            env:
+              - name: MYSQL_ROOT_PASSWORD
+              value: $pass_gen
         EOF
   # deploy services manifest ##########################
   # - id: "GKE - Deploy db"
