@@ -18,6 +18,7 @@
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_cloud_build"></a> [cloud\_build](#module\_cloud\_build) | ./modules/cloudbuild | n/a |
+| <a name="module_cloud_function"></a> [cloud\_function](#module\_cloud\_function) | ./modules/cloudfunction | n/a |
 | <a name="module_gke_ghack_cluster"></a> [gke\_ghack\_cluster](#module\_gke\_ghack\_cluster) | ./modules/gke | n/a |
 | <a name="module_iam"></a> [iam](#module\_iam) | ./modules/iam | n/a |
 | <a name="module_network"></a> [network](#module\_network) | ./modules/network | n/a |

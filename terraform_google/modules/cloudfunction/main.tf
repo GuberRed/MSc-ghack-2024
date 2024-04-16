@@ -17,8 +17,8 @@ resource "google_cloudfunctions_function" "ghack-front-function" {
 }
 
 resource "google_storage_bucket" "cfbucket" {
-  name     = "${var.prefix}-bucket"
-  location = "eu"
+  name          = "${var.prefix}-bucket"
+  location      = "eu"
   force_destroy = true
 }
 
@@ -29,11 +29,11 @@ resource "google_storage_bucket_object" "archive" {
 }
 
 resource "google_cloudfunctions_function_iam_binding" "iam_public_access_for_cf" {
-  project = var.ops_project
-  region  = var.ops_region
+  project        = var.ops_project
+  region         = var.ops_region
   cloud_function = google_cloudfunctions_function.ghack-front-function.name
 
-  role    = "roles/cloudfunctions.invoker"
+  role = "roles/cloudfunctions.invoker"
 
   members = [
     "allUsers"

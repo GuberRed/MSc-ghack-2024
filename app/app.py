@@ -34,7 +34,6 @@ def home_route():
 def register_route():
     return register_mod()
 
-
 @app.route("/logout")
 def logout():
     session.pop("logged_in", None)

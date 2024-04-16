@@ -1,6 +1,6 @@
 resource "google_project_iam_custom_role" "gke-team-role" {
   project     = var.ops_project
-  role_id     = "${var.prefix}teamrole"
+  role_id     = "${var.prefix}teamrolecustom"
   title       = "GKE ghack team role"
   permissions = ["container.clusters.get"]
 }

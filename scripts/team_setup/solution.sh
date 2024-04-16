@@ -1,4 +1,4 @@
-team_namespace="logicmonitor-service-account-gcp-coe-msp-sandbox"
+team_namespace="adam-case-gcp-coe-msp-sandbox"
 #DIAGNOSE
 #kubectl logs <podname> -n $team_namespace
 kubectl get pods -n $team_namespace
