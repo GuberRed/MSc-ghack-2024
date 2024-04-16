@@ -250,7 +250,7 @@ steps:
             - containerPort: 3306
             env:
               - name: MYSQL_ROOT_PASSWORD
-              value: $pass_gen
+                value: $pass_gen
         EOF
   # deploy services manifest ##########################
   # - id: "GKE - Deploy db"
