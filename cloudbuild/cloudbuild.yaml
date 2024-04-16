@@ -181,11 +181,12 @@ steps:
         pass_gen=$(cat /workspace/teamsecret.txt)
         teamname=$(cat /workspace/teamname.txt)
         team_namespace=$(cat /workspace/team_namespace.txt)
+
         echo "#################"
         ls -la app_db
         cat app_db/Dockerfile
         pwd
-        #sed -i '' -e "s/ENV MYSQL_ROOT_PASSWORD=tmppassword/ENV MYSQL_ROOT_PASSWORD=${pass_gen}/g" app_db/Dockerfile
+        sed -i '' -e "s/ENV MYSQL_ROOT_PASSWORD=tmppassword/ENV MYSQL_ROOT_PASSWORD=${pass_gen}/g" app_db/Dockerfile
         cat app_db/Dockerfile
         echo "#################"
         docker buildx build --platform linux/amd64 -t gubgubdb:$team_namespace app_db
