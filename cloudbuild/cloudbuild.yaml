@@ -49,7 +49,7 @@ steps:
 
         gcloud projects add-iam-policy-binding $_OPS_PROJECT_ID \
         --member=serviceAccount:${service_account_name} \
-        --role=projects/abel-ghack-infra/roles/ghackteamrolecustom
+        --role=projects/abel-ghack-infra/roles/ghackteamrcusgermany
         #container.clusters.get
         gcloud projects add-iam-policy-binding $_OPS_PROJECT_ID \
         --member=serviceAccount:${service_account_name} \
