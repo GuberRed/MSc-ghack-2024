@@ -1,4 +1,3 @@
-# Replace these variables with your actual values
 ###########################
 export SERVICE_ACCOUNT_EMAIL="dispatcher@gcp-coe-msp-sandbox.iam.gserviceaccount.com"
 ############################

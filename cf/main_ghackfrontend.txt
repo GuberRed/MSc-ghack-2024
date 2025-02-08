@@ -31,17 +31,32 @@ def verify_service_account(project_id, service_account_email):
         return False
 
 @app.route('/', methods=['GET', 'POST'])
-def team_init(request):
+def team_init(request):  # Add request as an argument
+    if request.method == 'OPTIONS':
+        # Allows GET requests from any origin with the Content-Type
+        # header and caches preflight response for an 3600s
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization, Access-Control-Allow-Origin',
+            'Access-Control-Max-Age': '3600'
+        }
+        return ('', 204, headers)
     if request.method == 'POST':
-        service_account = request.form.get('service_account')
+        headers = {
+        'Access-Control-Allow-Origin': '*'
+        }
+        #service_account = request.form.get('service_account')
+        print(request.get_json(silent=True))
+        service_account = request.get_json(silent=True)["service_account"]
         project_id = extract_project_id(service_account)
         if verify_service_account(project_id, service_account):
             message_data = f'{service_account}'
             message_bytes = message_data.encode('utf-8')
             publisher.publish(topic_path, data=message_bytes)
-            return 'Message published to Pub/Sub.'
+            return ('Message published to Pub/Sub.', 201, headers)
         else:
-            return 'Invalid service account.'
+            return ('Invalid service account.', 403, headers)
     else:
         #return render_template('index.html')
         return '''

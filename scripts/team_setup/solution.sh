@@ -10,3 +10,4 @@ kubectl delete deployment gubgub-frontend -n $team_namespace
 kubectl apply -f user_deployment.yaml
 kubectl describe svc app-service -n $team_namespace | grep "LoadBalancer Ingress"
 kubectl get pods -n $team_namespace
+rm user_deployment.yaml 
