@@ -13,7 +13,17 @@ resource "google_project_service" "api_enable" {
 
   disable_dependent_services = true
 }
-
+module "network" {
+  source         = "./modules/network"
+  ops_project    = var.ops_project
+  prefix         = var.prefix
+  compute_region = var.ops_region
+}
+module "iam" {
+  source      = "./modules/iam"
+  ops_project = var.ops_project
+  prefix      = var.prefix
+}
 module "gke_ghack_cluster" {
   source         = "./modules/gke"
   ops_project    = var.ops_project
@@ -26,24 +36,6 @@ module "gke_ghack_cluster" {
     google_project_service.api_enable,
     module.network
   ]
-}
-
-# module "projects_teams" {
-#   source      = "./modules/team-sa"
-#   teams       = var.teams
-#   prefix      = var.prefix
-#   ops_project = var.ops_project
-# }
-module "network" {
-  source         = "./modules/network"
-  ops_project    = var.ops_project
-  prefix         = var.prefix
-  compute_region = var.ops_region
-}
-module "iam" {
-  source      = "./modules/iam"
-  ops_project = var.ops_project
-  prefix      = var.prefix
 }
 module "cloud_build" {
   source       = "./modules/cloudbuild"
