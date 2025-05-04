@@ -27,29 +27,3 @@ variable "subnet_range" {
   default     = "10.20.30.0/24"
   description = "Subnet range"
 }
-
-/*
-variable "firewall_rule_egress_deny_all_name" {
-  type        = string
-  default     = "fwdenyall"
-  description = "Firewall rule name for denying all egress"
-}
-
-variable "firewall_rule_egress_deny_all_description" {
-  type        = string
-  default     = "Deny all egress traffic"
-  description = "Firewall rule description for denying all egress"
-}
-
-variable "firewall_rule_egress_allow_restricted_name" {
-  type        = string
-  default     = "egress-allow-restricted"
-  description = "Firewall rule name for allowing restricted APIs access"
-}
-
-variable "firewall_rule_egress_allow_restricted_description" {
-  type        = string
-  default     = "Allow egress traffic only from restricted apis"
-  description = "Firewall rule description for allowing restricted APIs access"
-}
-*/

@@ -19,22 +19,3 @@ module "subnet" {
   project_id            = var.ops_project
   description           = var.subnet_description
 }
-/*
-module "egress_deny_all" {
-  source = "./networkmodules/firewall-rules"
-
-  name         = var.firewall_rule_egress_deny_all_name
-  description  = var.firewall_rule_egress_deny_all_description
-  direction    = "EGRESS"
-  network_name = module.vpc.network_name
-  project_id   = var.ops_project
-  ranges       = ["0.0.0.0/0"]
-  priority = 3000
-  deny = [{
-    protocol = "all"
-  }]
-  # allow = [{
-  #   protocol = "icmp"
-  # }]
-}
-*/

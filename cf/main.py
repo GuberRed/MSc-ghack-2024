@@ -39,15 +39,7 @@ def team_init(request):
         message_bytes = message_data.encode('utf-8')
         publisher.publish(topic_path, data=message_bytes)
         return 'Message published to Pub/Sub.'
-        # if verify_service_account(project_id, service_account):
-        #     message_data = f'{service_account}'
-        #     message_bytes = message_data.encode('utf-8')
-        #     publisher.publish(topic_path, data=message_bytes)
-        #     return 'Message published to Pub/Sub.'
-        # else:
-        #     return 'Invalid service account.'
     else:
-        #return render_template('index.html')
         return '''
         <h1>Submit Service Account</h1>
         <form method="post">
